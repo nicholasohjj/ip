@@ -1,38 +1,52 @@
 #!/usr/bin/env bash
 
-# create bin directory if it doesn't exist
-if [ ! -d "../bin" ]
-then
-    mkdir ../bin
-fi
+SRC_DIR="../src/main/java"
+BIN_DIR="../bin"
+TEST_DIR="text-ui-test"
+INPUT_FILE="$TEST_DIR/input.txt"
+EXPECTED_FILE="$TEST_DIR/EXPECTED.TXT"
+ACTUAL_FILE="$TEST_DIR/ACTUAL.TXT"
+EXPECTED_UNIX_FILE="$TEST_DIR/EXPECTED-UNIX.TXT"
 
-# delete output from previous run
-if [ -e "./ACTUAL.TXT" ]
-then
-    rm ACTUAL.TXT
-fi
+# Create bin directory if it doesn't exist
+mkdir -p "$BIN_DIR"
+
+# Clean previous build files
+rm -rf "$BIN_DIR"/*
 
 # compile the code into the bin folder, terminates if error occurred
-if ! javac -cp ../src/main/java -Xlint:none -d ../bin ../src/main/java/*.java
-then
+echo "Compiling source files..."
+if ! javac -cp "$SRC_DIR" -Xlint:none -d "$BIN_DIR" "$SRC_DIR"/*.java; then
     echo "********** BUILD FAILURE **********"
     exit 1
 fi
+echo "Compilation successful."
 
-# run the program, feed commands from input.txt file and redirect the output to the ACTUAL.TXT
-java -classpath ../bin Duke < input.txt > ACTUAL.TXT
 
-# convert to UNIX format
-cp EXPECTED.TXT EXPECTED-UNIX.TXT
-dos2unix ACTUAL.TXT EXPECTED-UNIX.TXT
+# Delete previous test outputs
+rm -f "$ACTUAL_FILE"
 
-# compare the output to the expected output
-diff ACTUAL.TXT EXPECTED-UNIX.TXT
-if [ $? -eq 0 ]
-then
+# Run the program with input redirection and capture output
+echo "Running program..."
+if ! java -classpath "$BIN_DIR" NiniNana < "$INPUT_FILE" > "$ACTUAL_FILE"; then
+    echo "********** PROGRAM FAILURE **********"
+    exit 1
+fi
+echo "Program executed successfully."
+
+# Convert to UNIX format
+echo "Converting files to UNIX format..."
+cp "$EXPECTED_FILE" "$EXPECTED_UNIX_FILE"
+dos2unix "$ACTUAL_FILE" "$EXPECTED_UNIX_FILE"
+
+# Compare actual output with expected output
+echo "Comparing output..."
+if diff "$ACTUAL_FILE" "$EXPECTED_UNIX_FILE" > /dev/null; then
     echo "Test result: PASSED"
     exit 0
 else
     echo "Test result: FAILED"
+    echo "Differences found:"
+    diff "$ACTUAL_FILE" "$EXPECTED_UNIX_FILE"
     exit 1
 fi
