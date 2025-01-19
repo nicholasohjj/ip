@@ -1,19 +1,35 @@
 todo Read a book
 todo  
+todo
+todo Organise files
 deadline Submit project /by Sunday
-deadline Prepare slides /by 
+deadline Prepare slides /by
+deadline Complete report /by 2025-01-31
+deadline Plan vacation /by
 event Team meeting /from 10:00 AM /to 12:00 PM
 event Party /from 8:00 PM
+event Conference /from /to
+event Workshop /from 9:00 AM /to 6:00 PM
 mark 1
-unmark 1
 mark 10
+mark -1
+mark 0
+unmark 1
 unmark 0
+unmark 10
 list
 todo Clean the room
+todo Clean
 deadline Finish assignment /by 2025-01-25
+deadline Review /by
 event Workshop /from 9:00 AM /to 5:00 PM
+event Seminar /from /to 3:00 PM
+event Training /from 10:00 AM /to
 list
 mark 2
 unmark 3
 mark 5
+randomCommand
+event /from 10:00 AM /to 12:00 PM
+deadline /by 2025-01-31
 bye
