@@ -7,6 +7,18 @@ public class NiniNana {
     private static final String GREETING = " Hello! I'm NiniNana\n What can I do for you?";
     private static final String GOODBYE = "Bye. Hope to see you again soon!";
 
+    private enum Command {
+        LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, BYE;
+
+        public static Command fromString(String command) throws InvalidCommandException {
+            try {
+                return Command.valueOf(command.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new InvalidCommandException("I'm sorry, but I don't know what that means.");
+            }
+        }
+    }
+
     private static void printLine() {
         System.out.println(LINE);
     }
@@ -62,27 +74,27 @@ public class NiniNana {
         }
     }
 
-    private static void HandleTaskCommand(ArrayList<Task> store, String input, String command) {
+    private static void HandleTaskCommand(ArrayList<Task> store, String input, Command command) {
         try {
             String[] parts = input.split(" ", 2);
 
-            if (!parts[0].equals(command)) {
-                throw new InvalidCommandException("I'm sorry, but I don't know what that means.");
+            if (parts.length < 2 && (command == Command.MARK || command == Command.UNMARK || command == Command.DELETE)) {
+                throw new MissingArgumentException("Please specify the task number. Example: 'mark 2'.");
             }
 
-            if (command.equals("mark") || command.equals("unmark") || command.equals("delete")) {
-                if (parts.length < 2) {
-                    throw new MissingArgumentException("Please specify the task number. Example: 'mark 2'.");
-                }
+            if (command == Command.MARK || command == Command.UNMARK || command == Command.DELETE) {
                 try {
                     int index = Integer.parseInt(parts[1].trim()) - 1;
-                    if (command.equals("mark")) {
+                    if (command == Command.MARK) {
                         markTask(store, index);
-                    } else if (command.equals("unmark")) {
+                    } else if (command == Command.UNMARK) {
                         unmarkTask(store, index);
                     } else {
                         deleteTask(store, index);
                     }
+
+                    return;
+
                 } catch (NumberFormatException e) {
                     throw new InvalidTaskNumberException("Invalid task number. Please enter a valid number. Example: 'mark 2'.");
                 }
@@ -96,10 +108,10 @@ public class NiniNana {
             Task task = null;
 
             switch (command) {
-                case "todo":
+                case TODO:
                     task = new ToDoTask(details);
                     break;
-                case "deadline":
+                case DEADLINE:
                     if (!details.contains("/by")) {
                         throw new InvalidFormatException("Invalid format for deadline. Use: deadline <description> /by <time>");
                     }
@@ -109,7 +121,7 @@ public class NiniNana {
                     }
                     task = new DeadlineTask(deadlineParts[0].trim(), deadlineParts[1].trim());
                     break;
-                case "event":
+                case EVENT:
                     if (!details.contains("/from") || !details.contains("/to")) {
                         throw new InvalidFormatException("Invalid format for event. Use: event <description> /from <start> /to <end>");
                     }
@@ -121,7 +133,6 @@ public class NiniNana {
                     break;
                 default:
                     throw new InvalidCommandException("Unknown command.");
-
             }
             store.add(task);
             printLineWithMessage(String.format("Got it. I've added this task:\n  %s\nNow you have %d tasks in the list.",
@@ -140,27 +151,23 @@ public class NiniNana {
                 try {
                     input = sc.nextLine().trim();
 
-                    if (input.equalsIgnoreCase("list")) {
+                    if (input.equalsIgnoreCase("bye")) {
+                        break;
+                    }
+
+                    String[] parts = input.split(" ", 2);
+
+                    Command command = Command.fromString(parts[0]);
+
+                    if (command == Command.LIST) {
                         listTasks(store);
-                    } else if (input.startsWith("mark")) {
-                        HandleTaskCommand(store, input, "mark");
-                    } else if (input.startsWith("unmark")) {
-                        HandleTaskCommand(store, input, "unmark");
-                    } else if (input.startsWith("deadline")) {
-                        HandleTaskCommand(store, input, "deadline");
-                    } else if (input.startsWith("todo")) {
-                        HandleTaskCommand(store, input, "todo");
-                    } else if (input.startsWith("event")) {
-                        HandleTaskCommand(store, input, "event");
-                    } else if (input.startsWith("delete")) {
-                        HandleTaskCommand(store, input, "delete");
-                    } else if (!input.equalsIgnoreCase("bye")) {
-                        throw new InvalidCommandException("I'm sorry, but I don't know what that means.");
+                    } else {
+                        HandleTaskCommand(store, input, command);
                     }
                 } catch (NiniException e) {
                     printLineWithMessage(e.getMessage());
                 }
-            } while (!input.equalsIgnoreCase("bye"));
+            } while (true);
 
         }
     }
