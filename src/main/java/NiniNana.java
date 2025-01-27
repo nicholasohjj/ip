@@ -1,3 +1,8 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedWriter;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -6,13 +11,26 @@ import exceptions.NiniException;
 import exceptions.MissingArgumentException;
 import exceptions.InvalidFormatException;
 import exceptions.InvalidTaskNumberException;
+
 public class NiniNana {
     private static final String LINE = "____________________________________________________________";
     private static final String GREETING = " Hello! I'm NiniNana\n What can I do for you?";
     private static final String GOODBYE = "Bye. Hope to see you again soon!";
 
+    private static final String FILENAME = "./data/chat.txt";
+
+    private static void ensureFileDirectoryExists() {
+        File directory = new File("./data");
+        if (!directory.exists()) {
+            boolean isCreated = directory.mkdirs();
+            if (!isCreated) {
+                printLineWithMessage("Failed to create the 'data' directory for saving tasks.");
+            }
+        }
+    }
+
     private enum Command {
-        LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, BYE;
+        LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE;
 
         public static Command fromString(String command) throws InvalidCommandException {
             try {
@@ -31,6 +49,56 @@ public class NiniNana {
         printLine();
         System.out.println(message);
         printLine();
+    }
+
+    private static void saveTaskToFile(Task task) {
+        ensureFileDirectoryExists();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME, true))) {
+            writer.write(task.serialize() + System.lineSeparator());
+        } catch (IOException e) {
+            printLineWithMessage("Error saving task to file: " + e.getMessage());
+        }
+    }
+
+    private static void overwriteFile(ArrayList<Task> store) {
+        ensureFileDirectoryExists();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME))) {
+            for (Task task : store) {
+                writer.write(task.serialize() + System.lineSeparator());
+            }
+        } catch (IOException e) {
+            printLineWithMessage("Error overwriting tasks to file: " + e.getMessage());
+        }
+    }
+
+
+    private static ArrayList<Task> loadTasksFromFile() {
+        ArrayList<Task> store = new ArrayList<>();
+        File file = new File(FILENAME);
+
+        if (!file.exists()) {
+            return store;
+        }
+
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                try {
+                    Task task = Task.deserialize(line);
+                    if (task != null) {
+                        store.add(task);
+                    } else {
+                        printLineWithMessage("Skipped a line due to invalid format: " + line);
+                    }
+                } catch (Exception e) {
+                    printLineWithMessage("Error processing line: \"" + line + "\". Skipping it.");
+                }
+            }
+        } catch (IOException e) {
+            printLineWithMessage("Error loading tasks from file: " + e.getMessage());
+        }
+
+        return store;
     }
 
     private static void listTasks(ArrayList<Task> store) throws MissingArgumentException {
@@ -53,6 +121,7 @@ public class NiniNana {
         if (isValidIndex(store, index)) {
             store.get(index).markAsDone();
             printLineWithMessage("Nice! I've marked this task as done:\n  " + store.get(index));
+            overwriteFile(store);
         } else {
             throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and " + store.size() + ".");
         }
@@ -63,6 +132,7 @@ public class NiniNana {
             Task removedTask = store.remove(index);
             printLineWithMessage(String.format("Noted. I've removed this task:\n  %s\nNow you have %d tasks in the list.",
                     removedTask, store.size()));
+            overwriteFile(store);
         } else {
             throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and " + store.size() + ".");
         }
@@ -73,6 +143,7 @@ public class NiniNana {
         if (isValidIndex(store, index)) {
             store.get(index).unmark();
             printLineWithMessage("OK, I've marked this task as not done yet:\n  " + store.get(index));
+            overwriteFile(store);
         } else {
             throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and " + store.size() + ".");
         }
@@ -141,13 +212,14 @@ public class NiniNana {
             store.add(task);
             printLineWithMessage(String.format("Got it. I've added this task:\n  %s\nNow you have %d tasks in the list.",
                     task, store.size()));
+            saveTaskToFile(task);
         } catch (Exception e) {
             printLineWithMessage(e.getMessage());
         }
     }
 
     private static void chat() {
-        ArrayList<Task> store = new ArrayList<>();
+        ArrayList<Task> store = loadTasksFromFile();
 
         try (Scanner sc = new Scanner(System.in)) {
             String input = null;

@@ -1,14 +1,19 @@
 public class EventTask extends Task {
-    private String startDate;
-    private String endDate;
-    public EventTask(String name, String startDate, String endDate) {
-        super(name);
-        this.startDate = startDate;
-        this.endDate = endDate;
+    private final String from;
+    private final String to;
+    public EventTask(String description, String from, String to) {
+        super(description);
+        this.from = from;
+        this.to = to;
+    }
+
+    @Override
+    public String serialize() {
+        return String.format("E|%d|%s|%s|%s", isDone ? 1 : 0, description, from, to);
     }
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " ( from: " + startDate + " to: " + endDate + ")";
+        return "[E]" + super.toString() + " ( from: " + from + " to: " + to + ")";
     }
 }
