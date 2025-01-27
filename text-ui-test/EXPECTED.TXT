@@ -8,10 +8,10 @@ Got it. I've added this task:
 Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
+OOPS!!! The description of a TODO cannot be empty.
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
+OOPS!!! The description of a TODO cannot be empty.
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
@@ -24,7 +24,7 @@ Got it. I've added this task:
 Now you have 3 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
+Invalid format for deadline. Use: deadline <description> /by <time>
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
@@ -32,7 +32,7 @@ Got it. I've added this task:
 Now you have 4 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
+Invalid format for deadline. Use: deadline <description> /by <time>
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
@@ -40,10 +40,10 @@ Got it. I've added this task:
 Now you have 5 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
+Invalid format for event. Use: event <description> /from <start> /to <end>
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
+Invalid format for event. Use: event <description> /from <start> /to <end>
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
@@ -55,29 +55,23 @@ Nice! I've marked this task as done:
   [T][X] Read a book
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
+Invalid task number. Please enter a number between 1 and 6.
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
+Invalid task number. Please enter a number between 1 and 6.
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
-____________________________________________________________
-____________________________________________________________
-An unexpected error occurred. Please try again.
+Invalid task number. Please enter a number between 1 and 6.
 ____________________________________________________________
 ____________________________________________________________
 OK, I've marked this task as not done yet:
   [T][ ] Read a book
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
+Invalid task number. Please enter a number between 1 and 6.
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
-____________________________________________________________
-____________________________________________________________
-An unexpected error occurred. Please try again.
+Invalid task number. Please enter a number between 1 and 6.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
@@ -104,7 +98,7 @@ Got it. I've added this task:
 Now you have 9 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
+Invalid format for deadline. Use: deadline <description> /by <time>
 ____________________________________________________________
 ____________________________________________________________
 Got it. I've added this task:
@@ -112,10 +106,10 @@ Got it. I've added this task:
 Now you have 10 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
+Invalid format for event. Use: event <description> /from <start> /to <end>
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
+Invalid format for event. Use: event <description> /from <start> /to <end>
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
@@ -135,21 +129,12 @@ Nice! I've marked this task as done:
   [T][X] Organise files
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
-____________________________________________________________
-____________________________________________________________
 OK, I've marked this task as not done yet:
   [D][ ] Submit project (by: Sunday)
 ____________________________________________________________
 ____________________________________________________________
-An unexpected error occurred. Please try again.
-____________________________________________________________
-____________________________________________________________
 Nice! I've marked this task as done:
   [E][X] Team meeting ( from: 10:00 AM to: 12:00 PM)
-____________________________________________________________
-____________________________________________________________
-An unexpected error occurred. Please try again.
 ____________________________________________________________
 ____________________________________________________________
 I'm sorry, but I don't know what that means.
