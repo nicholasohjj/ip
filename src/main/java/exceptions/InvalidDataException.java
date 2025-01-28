@@ -2,6 +2,6 @@ package exceptions;
 
 public class InvalidDataException extends NiniException {
     public InvalidDataException(String message) {
-        super(message);
+        super("INVALID DATA! " + message);
     }
 }
