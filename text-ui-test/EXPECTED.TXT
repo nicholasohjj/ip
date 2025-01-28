@@ -8,54 +8,61 @@ Got it. I've added this task:
 Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-OOPS!!! The description of a TODO cannot be empty.
-____________________________________________________________
-____________________________________________________________
-OOPS!!! The description of a TODO cannot be empty.
-____________________________________________________________
-____________________________________________________________
 Got it. I've added this task:
-  [T][ ] Organise files
+  [T][ ] Clean the room
 Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
+Description for todo cannot be empty
+____________________________________________________________
+____________________________________________________________
+Description for todo cannot be empty
+____________________________________________________________
+____________________________________________________________
 Got it. I've added this task:
-  [D][ ] Submit project (by: Sunday)
+  [D][ ] Submit assignment (deadline: Dec 02 2025, 6:00pm)
 Now you have 3 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Invalid format for deadline. Use: deadline <description> /by <time>
-____________________________________________________________
-____________________________________________________________
 Got it. I've added this task:
-  [D][ ] Complete report (by: 2025-01-31)
+  [D][ ] Prepare slides (deadline: Feb 10 2025, 3:00pm)
 Now you have 4 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 Invalid format for deadline. Use: deadline <description> /by <time>
 ____________________________________________________________
 ____________________________________________________________
+Invalid deadline format. Please use the format: d/M/yyyy HHmm (e.g., 25/12/2025 1800)
+____________________________________________________________
+____________________________________________________________
+Invalid deadline format. Please use the format: d/M/yyyy HHmm (e.g., 25/12/2025 1800)
+____________________________________________________________
+____________________________________________________________
 Got it. I've added this task:
-  [E][ ] Team meeting ( from: 10:00 AM to: 12:00 PM)
+  [E][ ] Team meeting ( from: Jan 29 2025, 10:00am to: Jan 29 2025, 12:00pm)
 Now you have 5 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Invalid format for event. Use: event <description> /from <start> /to <end>
-____________________________________________________________
-____________________________________________________________
-Invalid format for event. Use: event <description> /from <start> /to <end>
-____________________________________________________________
-____________________________________________________________
 Got it. I've added this task:
-  [E][ ] Workshop ( from: 9:00 AM to: 6:00 PM)
+  [E][ ] Workshop ( from: Jan 30 2025, 9:00am to: Jan 30 2025, 5:00pm)
 Now you have 6 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Invalid deadline format. Please use the format: d/M/yyyy HHmm (e.g., 25/12/2025 1800)
+____________________________________________________________
+____________________________________________________________
+Invalid format for event. Use: event <description> /from <start> /to <end>
+____________________________________________________________
+____________________________________________________________
+Invalid format for event. Use: event <description> /from <start> /to <end>
 ____________________________________________________________
 ____________________________________________________________
 Nice! I've marked this task as done:
   [T][X] Read a book
 ____________________________________________________________
 ____________________________________________________________
-Invalid task number. Please enter a number between 1 and 6.
+Nice! I've marked this task as done:
+  [T][X] Clean the room
 ____________________________________________________________
 ____________________________________________________________
 Invalid task number. Please enter a number between 1 and 6.
@@ -68,86 +75,41 @@ OK, I've marked this task as not done yet:
   [T][ ] Read a book
 ____________________________________________________________
 ____________________________________________________________
-Invalid task number. Please enter a number between 1 and 6.
+Task is already unmarked.
 ____________________________________________________________
 ____________________________________________________________
 Invalid task number. Please enter a number between 1 and 6.
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks in your list:
-1. [T][ ] Read a book
-2. [T][ ] Organise files
-3. [D][ ] Submit project (by: Sunday)
-4. [D][ ] Complete report (by: 2025-01-31)
-5. [E][ ] Team meeting ( from: 10:00 AM to: 12:00 PM)
-6. [E][ ] Workshop ( from: 9:00 AM to: 6:00 PM)
+Noted. I've removed this task:
+  [T][ ] Read a book
+Now you have 5 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
-  [T][ ] Clean the room
-Now you have 7 tasks in the list.
-____________________________________________________________
-____________________________________________________________
-Got it. I've added this task:
-  [T][ ] Clean
-Now you have 8 tasks in the list.
-____________________________________________________________
-____________________________________________________________
-Got it. I've added this task:
-  [D][ ] Finish assignment (by: 2025-01-25)
-Now you have 9 tasks in the list.
-____________________________________________________________
-____________________________________________________________
-Invalid format for deadline. Use: deadline <description> /by <time>
-____________________________________________________________
-____________________________________________________________
-Got it. I've added this task:
-  [E][ ] Workshop ( from: 9:00 AM to: 5:00 PM)
-Now you have 10 tasks in the list.
-____________________________________________________________
-____________________________________________________________
-Invalid format for event. Use: event <description> /from <start> /to <end>
-____________________________________________________________
-____________________________________________________________
-Invalid format for event. Use: event <description> /from <start> /to <end>
+Invalid task index. Please enter a valid number.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
-1. [T][ ] Read a book
-2. [T][ ] Organise files
-3. [D][ ] Submit project (by: Sunday)
-4. [D][ ] Complete report (by: 2025-01-31)
-5. [E][ ] Team meeting ( from: 10:00 AM to: 12:00 PM)
-6. [E][ ] Workshop ( from: 9:00 AM to: 6:00 PM)
-7. [T][ ] Clean the room
-8. [T][ ] Clean
-9. [D][ ] Finish assignment (by: 2025-01-25)
-10. [E][ ] Workshop ( from: 9:00 AM to: 5:00 PM)
+1. [T][X] Clean the room
+2. [D][ ] Submit assignment (deadline: Dec 02 2025, 6:00pm)
+3. [D][ ] Prepare slides (deadline: Feb 10 2025, 3:00pm)
+4. [E][ ] Team meeting ( from: Jan 29 2025, 10:00am to: Jan 29 2025, 12:00pm)
+5. [E][ ] Workshop ( from: Jan 30 2025, 9:00am to: Jan 30 2025, 5:00pm)
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
-  [T][X] Organise files
+Tasks sorted by date!
 ____________________________________________________________
 ____________________________________________________________
-OK, I've marked this task as not done yet:
-  [D][ ] Submit project (by: Sunday)
+Unknown command
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
-  [E][X] Team meeting ( from: 10:00 AM to: 12:00 PM)
+Description for todo cannot be empty
 ____________________________________________________________
 ____________________________________________________________
-I'm sorry, but I don't know what that means.
+Description cannot be empty
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
-  [E][ ]  ( from: 10:00 AM to: 12:00 PM)
-Now you have 11 tasks in the list.
-____________________________________________________________
-____________________________________________________________
-Got it. I've added this task:
-  [D][ ]  (by: 2025-01-31)
-Now you have 12 tasks in the list.
+Description cannot be empty
 ____________________________________________________________
 ____________________________________________________________
 Bye. Hope to see you again soon!
