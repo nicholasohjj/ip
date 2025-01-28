@@ -19,4 +19,8 @@ public class AddCommand extends Command{
         ui.showTaskAdded(task, taskList.size());
         storage.saveTask(task);
     }
+
+    public Task getTask() {
+        return this.task;
+    }
 }

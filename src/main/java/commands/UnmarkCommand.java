@@ -26,4 +26,8 @@ public class UnmarkCommand extends Command{
             throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and " + taskList.size() + ".");
         }
     }
+
+    public int getTaskIndex() {
+        return this.unmarkIndex;
+    }
 }

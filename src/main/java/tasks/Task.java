@@ -7,7 +7,7 @@ import exceptions.NiniException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-public abstract class Task {
+public class Task {
     protected String description;
     protected boolean isDone;
 
@@ -19,6 +19,14 @@ public abstract class Task {
     public Task (String description, boolean isDone) {
         this(description);
         this.isDone = isDone;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isDone() {
+        return isDone;
     }
 
     public void markAsDone() {
@@ -37,7 +45,9 @@ public abstract class Task {
         }
     }
 
-    public abstract String serialize();
+    public String serialize() {
+        return null;
+    };
 
     public static Task deserialize(String data) throws NiniException {
         if (data == null || data.isEmpty()) {

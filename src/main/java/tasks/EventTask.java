@@ -18,6 +18,9 @@ public class EventTask extends Task {
         try {
             this.from = LocalDateTime.parse(from.trim(), INPUT_FORMATTER);
             this.to = LocalDateTime.parse(to.trim(), INPUT_FORMATTER);
+            if (this.from.isAfter(this.to)) {
+                throw new InvalidFormatException("The start time must be earlier than the end time.");
+            }
         } catch (DateTimeParseException e) {
             throw new InvalidFormatException("Invalid deadline format. Please use the format: d/M/yyyy HHmm (e.g., 25/12/2025 1800)");
         }
@@ -28,6 +31,9 @@ public class EventTask extends Task {
         try {
             this.from = LocalDateTime.parse(from.trim(), INPUT_FORMATTER);
             this.to = LocalDateTime.parse(to.trim(), INPUT_FORMATTER);
+            if (this.from.isAfter(this.to)) {
+                throw new InvalidFormatException("The start time must be earlier than the end time.");
+            }
         } catch (DateTimeParseException e) {
             throw new InvalidFormatException("Invalid deadline format. Please use the format: d/M/yyyy HHmm (e.g., 25/12/2025 1800)");
         }
@@ -46,5 +52,9 @@ public class EventTask extends Task {
     @Override
     public String toString() {
         return "[E]" + super.toString() + " ( from: " + from.format(OUTPUT_FORMATTER) + " to: " + to.format(OUTPUT_FORMATTER) + ")";
+    }
+
+    public LocalDateTime getEndDateTime() {
+        return this.to;
     }
 }

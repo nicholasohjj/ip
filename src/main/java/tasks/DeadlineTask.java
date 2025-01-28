@@ -30,8 +30,6 @@ public class DeadlineTask extends Task {
         }
     }
 
-
-
     public LocalDateTime getDeadline() {
         return this.deadline;
     }

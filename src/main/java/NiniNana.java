@@ -21,17 +21,21 @@ public class NiniNana {
     private final Parser parser;
 
     private static final String FILENAME = "./data/chat.txt";
+    private final Scanner scanner;
 
+    public NiniNana(Ui ui, Storage storage, Parser parser, Scanner scanner) {
+        this.ui = ui;
+        this.storage = storage;
+        this.parser = parser;
+        this.taskList = new TaskList(storage.loadTasks());
+        this.scanner = scanner;
+    }
     public NiniNana() {
-        ui = new Ui();
-        storage = new Storage();
-        parser = new Parser();
-        taskList = new TaskList(storage.loadTasks());
+        this(new Ui(), new Storage(), new Parser(), new Scanner(System.in));
     }
 
     public void run() {
         ui.showGreeting();
-        Scanner scanner = new Scanner(System.in);
 
         while (true) {
             try {

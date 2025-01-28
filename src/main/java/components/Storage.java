@@ -11,10 +11,20 @@ import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class Storage {
-    private static final String FILENAME = "./data/chat.txt";
+    private final String fileName;
 
-    private static void ensureFileDirectoryExists() {
-        File directory = new File("./data");
+    public Storage() {
+        this.fileName = "./data/chat.txt";
+    }
+
+    public Storage(String fileName) {
+        this.fileName = fileName;
+    }
+
+
+
+    private void ensureFileDirectoryExists() {
+        File directory = new File(new File(fileName).getParent());
         if (!directory.exists()) {
             boolean isCreated = directory.mkdirs();
             if (!isCreated) {
@@ -23,9 +33,10 @@ public class Storage {
         }
     }
 
+
     public ArrayList<Task> loadTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
-        File file = new File(FILENAME);
+        File file = new File(fileName);
 
         if (!file.exists()) {
             return tasks;
@@ -48,7 +59,7 @@ public class Storage {
 
     public void saveTask(Task task) throws NiniException {
         ensureFileDirectoryExists();
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME, true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
             writer.write(task.serialize() + System.lineSeparator());
         } catch (IOException e) {
             throw new NiniException("Error saving task: " + e.getMessage());
@@ -57,7 +68,7 @@ public class Storage {
 
     public void overwriteTasks(ArrayList<Task> tasks) throws NiniException {
         ensureFileDirectoryExists();
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for (Task task : tasks) {
                 writer.write(task.serialize() + System.lineSeparator());
             }
