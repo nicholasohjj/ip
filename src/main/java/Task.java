@@ -1,3 +1,6 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 public abstract class Task {
     protected String description;
     protected boolean isDone;
@@ -18,31 +21,60 @@ public abstract class Task {
     public abstract String serialize();
 
     public static Task deserialize(String data) {
+        if (data == null || data.isEmpty()) {
+            System.err.println("Error: Cannot deserialize null or empty data.");
+            return null;
+        }
         String[] parts = data.split("\\|");
+        final int TYPE_INDEX = 0;
+        final int DONE_INDEX = 1;
+        final int DESCRIPTION_INDEX = 2;
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
 
-        if (parts.length < 3) return null;
+        if (parts.length < 3) {
+            System.err.println("Error: Incomplete data for task deserialization.");
+            return null;
+        }
 
-        String type = parts[0];
-        boolean isDone = parts[1].equals("1");
-        String description = parts[2];
+        String type = parts[TYPE_INDEX].trim();
+        boolean isDone = parts[DONE_INDEX].trim().equals("1");
+        String description = parts[DESCRIPTION_INDEX].trim();
 
-        switch (type) {
-            case "T":
-                ToDoTask todo = new ToDoTask(description);
-                if (isDone) todo.markAsDone();
-                return todo;
-            case "D":
-                if (parts.length < 4) return null;
-                DeadlineTask deadline = new DeadlineTask(description, parts[3]);
-                if (isDone) deadline.markAsDone();
-                return deadline;
-            case "E":
-                if (parts.length < 5) return null;
-                EventTask event = new EventTask(description, parts[3], parts[4]);
-                if (isDone) event.markAsDone();
-                return event;
-            default:
-                return null;
+        try {
+            switch (type) {
+                case "T":
+                    ToDoTask todo = new ToDoTask(description);
+                    if (isDone) todo.markAsDone();
+                    return todo;
+                case "D":
+                    if (parts.length < 4) {
+                        System.err.println("Error: Missing deadline information.");
+                        return null;
+                    }
+                    String deadlineStr = parts[3].trim();
+                    LocalDateTime deadline = LocalDateTime.parse(deadlineStr, inputFormatter);
+                    DeadlineTask deadlineTask = new DeadlineTask(description, deadlineStr);
+                    if (isDone) deadlineTask.markAsDone();
+                    return deadlineTask;
+                case "E":
+                    if (parts.length < 5) {
+                        System.err.println("Error: Missing event start or end time.");
+                        return null;
+                    }
+                    String fromStr = parts[3].trim();
+                    String toStr = parts[4].trim();
+                    LocalDateTime from = LocalDateTime.parse(fromStr, inputFormatter);
+                    LocalDateTime to = LocalDateTime.parse(toStr, inputFormatter);
+                    EventTask event = new EventTask(description, fromStr, toStr);
+                    if (isDone) event.markAsDone();
+                    return event;
+                default:
+                    System.err.println("Error: Unknown task type.");
+                    return null;
+            }
+        } catch (DateTimeParseException e) {
+            System.err.println("Error: Invalid date/time format during deserialization. " + e.getMessage());
+            return null;
         }
     }
 
