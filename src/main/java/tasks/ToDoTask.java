@@ -1,7 +1,15 @@
+package tasks;
+
+import exceptions.NiniException;
+
 public class ToDoTask extends Task {
 
     public ToDoTask(String description) {
         super(description);
+    }
+
+    public ToDoTask(String description, boolean isDone) {
+        super(description,isDone);
     }
 
     @Override
