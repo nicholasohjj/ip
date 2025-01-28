@@ -1,3 +1,9 @@
+package tasks;
+
+import exceptions.InvalidDataException;
+import exceptions.InvalidFormatException;
+import exceptions.NiniException;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -10,20 +16,32 @@ public abstract class Task {
         this.isDone = false;
     }
 
+    public Task (String description, boolean isDone) {
+        this(description);
+        this.isDone = isDone;
+    }
+
     public void markAsDone() {
-        this.isDone = true;
+        if (this.isDone) {
+            throw new IllegalStateException("Task is already marked as done");
+        } else {
+            this.isDone = true;
+        }
     }
 
     public void unmark() {
-        this.isDone = false;
+        if (!this.isDone) {
+            throw new IllegalStateException("Task is already unmarked.");
+        } else {
+            this.isDone = false;
+        }
     }
 
     public abstract String serialize();
 
-    public static Task deserialize(String data) {
+    public static Task deserialize(String data) throws NiniException {
         if (data == null || data.isEmpty()) {
-            System.err.println("Error: Cannot deserialize null or empty data.");
-            return null;
+            throw new InvalidDataException("Error: Cannot deserialize null or empty data.");
         }
         String[] parts = data.split("\\|");
         final int TYPE_INDEX = 0;
@@ -32,8 +50,11 @@ public abstract class Task {
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
 
         if (parts.length < 3) {
-            System.err.println("Error: Incomplete data for task deserialization.");
-            return null;
+            throw new InvalidDataException("Error: Incomplete data for task deserialization.");
+        }
+
+        if (!parts[DONE_INDEX].equals("1") && !parts[DONE_INDEX].equals("0")) {
+            throw new InvalidDataException("Data has invalid values for is_done status");
         }
 
         String type = parts[TYPE_INDEX].trim();
@@ -43,38 +64,28 @@ public abstract class Task {
         try {
             switch (type) {
                 case "T":
-                    ToDoTask todo = new ToDoTask(description);
-                    if (isDone) todo.markAsDone();
-                    return todo;
+                    return new ToDoTask(description, isDone);
                 case "D":
                     if (parts.length < 4) {
-                        System.err.println("Error: Missing deadline information.");
-                        return null;
+                        throw new InvalidDataException("Error: Missing deadline information.");
                     }
                     String deadlineStr = parts[3].trim();
                     LocalDateTime deadline = LocalDateTime.parse(deadlineStr, inputFormatter);
-                    DeadlineTask deadlineTask = new DeadlineTask(description, deadlineStr);
-                    if (isDone) deadlineTask.markAsDone();
-                    return deadlineTask;
+                    return new DeadlineTask(description, deadlineStr, isDone);
                 case "E":
                     if (parts.length < 5) {
-                        System.err.println("Error: Missing event start or end time.");
-                        return null;
+                        throw new InvalidDataException("Error: Missing event start or end time.");
                     }
                     String fromStr = parts[3].trim();
                     String toStr = parts[4].trim();
                     LocalDateTime from = LocalDateTime.parse(fromStr, inputFormatter);
                     LocalDateTime to = LocalDateTime.parse(toStr, inputFormatter);
-                    EventTask event = new EventTask(description, fromStr, toStr);
-                    if (isDone) event.markAsDone();
-                    return event;
+                    return new EventTask(description, fromStr, toStr, isDone);
                 default:
-                    System.err.println("Error: Unknown task type.");
-                    return null;
+                    throw new InvalidDataException("Error: Unknown task type.");
             }
         } catch (DateTimeParseException e) {
-            System.err.println("Error: Invalid date/time format during deserialization. " + e.getMessage());
-            return null;
+            throw new InvalidFormatException("Error: Invalid date/time format during deserialization. " + e.getMessage());
         }
     }
 
