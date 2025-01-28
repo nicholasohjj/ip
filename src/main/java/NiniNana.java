@@ -3,6 +3,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedWriter;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -30,7 +34,7 @@ public class NiniNana {
     }
 
     private enum Command {
-        LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE;
+        LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, SORT;
 
         public static Command fromString(String command) throws InvalidCommandException {
             try {
@@ -149,13 +153,52 @@ public class NiniNana {
         }
     }
 
+    private static void sortTasksByDate(ArrayList<Task> store) {
+        store.sort((task1, task2) -> {
+            LocalDateTime date1 = null;
+            LocalDateTime date2 = null;
+
+            if (task1 instanceof DeadlineTask) {
+                date1 = ((DeadlineTask) task1).getDeadline();
+            } else if (task1 instanceof EventTask) {
+                date1 = ((EventTask) task1).getStartDateTime(); // Assume EventTask has a startDateTime field
+            }
+
+            if (task2 instanceof DeadlineTask) {
+                date2 = ((DeadlineTask) task2).getDeadline();
+            } else if (task2 instanceof EventTask) {
+                date2 = ((EventTask) task2).getStartDateTime();
+            }
+
+            if (date1 == null && date2 == null) {
+                return 0;
+            } else if (date1 == null) {
+                return 1; // Null dates go to the end
+            } else if (date2 == null) {
+                return -1; // Null dates go to the end
+            } else {
+                return date1.compareTo(date2); // Compare the dates
+            }
+        });
+    }
+
+
     private static void HandleTaskCommand(ArrayList<Task> store, String input, Command command) {
         try {
             String[] parts = input.split(" ", 2);
 
+            if (command == Command.SORT) {
+                sortTasksByDate(store);
+                printLineWithMessage("Tasks sorted by date!");
+                listTasks(store);
+                return; // Exit early since the command is handled
+            }
+
+
             if (parts.length < 2 && (command == Command.MARK || command == Command.UNMARK || command == Command.DELETE)) {
                 throw new MissingArgumentException("Please specify the task number. Example: 'mark 2'.");
             }
+
 
             if (command == Command.MARK || command == Command.UNMARK || command == Command.DELETE) {
                 try {
