@@ -6,6 +6,7 @@ TEST_DIR="text-ui-test"
 INPUT_FILE="$TEST_DIR/input.txt"
 EXPECTED_FILE="$TEST_DIR/EXPECTED.TXT"
 ACTUAL_FILE="$TEST_DIR/ACTUAL.TXT"
+OUTPUT_DATA="$TEST_DIR/data/chat.txt"
 EXPECTED_UNIX_FILE="$TEST_DIR/EXPECTED-UNIX.TXT"
 
 # Create bin directory if it doesn't exist
@@ -25,6 +26,7 @@ echo "Compilation successful."
 
 # Delete previous test outputs
 rm -f "$ACTUAL_FILE"
+rm -f "$OUTPUT_DATA"
 
 # Run the program with input redirection and capture output
 echo "Running program..."

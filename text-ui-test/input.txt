@@ -1,35 +1,43 @@
 todo Read a book
-todo  
+todo Clean the room
+
 todo
-todo Organise files
-deadline Submit project /by Sunday
-deadline Prepare slides /by
+todo
+
+deadline Submit assignment /by 2/12/2025 1800
+deadline Prepare slides /by 10/2/2025 1500
+
+deadline Submit project
+deadline Review /by Sunday
 deadline Complete report /by 2025-01-31
-deadline Plan vacation /by
-event Team meeting /from 10:00 AM /to 12:00 PM
-event Party /from 8:00 PM
-event Conference /from /to
-event Workshop /from 9:00 AM /to 6:00 PM
+
+event Team meeting /from 29/1/2025 1000 /to 29/1/2025 1200
+event Workshop /from 30/1/2025 0900 /to 30/1/2025 1700
+
+event Seminar /from /to 29/1/2025 1500
+event Conference /from 30/1/2025
+event Party
+
 mark 1
+mark 2
 mark 10
 mark -1
-mark 0
+
 unmark 1
-unmark 0
-unmark 10
-list
-todo Clean the room
-todo Clean
-deadline Finish assignment /by 2025-01-25
-deadline Review /by
-event Workshop /from 9:00 AM /to 5:00 PM
-event Seminar /from /to 3:00 PM
-event Training /from 10:00 AM /to
-list
-mark 2
 unmark 3
-mark 5
+unmark 10
+
+delete 1
+delete 10 # Invalid index (out of range)
+
+list
+
+sort
+
 randomCommand
+
+todo
+deadline /by 2/12/2025 1800
 event /from 10:00 AM /to 12:00 PM
-deadline /by 2025-01-31
+
 bye
