@@ -2,19 +2,12 @@ package components;
 
 import tasks.Task;
 
-import java.util.ArrayList;
+import java.util.List;
+
 public class Ui {
+
     private static final String LINE = "____________________________________________________________";
 
-    public static void printLine() {
-        System.out.println(LINE);
-    }
-
-    public static void printLineWithMessage(String message) {
-        printLine();
-        System.out.println(message);
-        printLine();
-    }
 
     public void showGreeting() {
         printLineWithMessage(" Hello! I'm NiniNana\n What can I do for you?");
@@ -28,7 +21,7 @@ public class Ui {
         printLineWithMessage(errorMessage);
     }
 
-    public void showTaskList(ArrayList<Task> tasks) {
+    public void showTaskList(List<Task> tasks) {
         printLine();
         if (tasks.isEmpty()) {
             System.out.println("The list is empty.");
@@ -42,10 +35,25 @@ public class Ui {
     }
 
     public void showTaskAdded(Task task, int size) {
-        printLineWithMessage(String.format("Got it. I've added this task:\n  %s\nNow you have %d tasks in the list.", task, size));
+        printLineWithMessage(String.format(
+                "Got it. I've added this task:\n  %s\nNow you have %d tasks in the list.",
+                task, size));
     }
 
     public void showTaskRemoved(Task task, int size) {
-        printLineWithMessage(String.format("Noted. I've removed this task:\n  %s\nNow you have %d tasks in the list.", task, size));
+        printLineWithMessage(String.format(
+                "Noted. I've removed this task:\n  %s\nNow you have %d tasks in the list.",
+                task, size));
     }
+
+    public void printLine() {
+        System.out.println(LINE);
+    }
+
+    public void printLineWithMessage(String message) {
+        printLine();
+        System.out.println(message);
+        printLine();
+    }
+
 }

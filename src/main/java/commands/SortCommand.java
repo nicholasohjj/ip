@@ -5,10 +5,10 @@ import components.TaskList;
 import components.Ui;
 import exceptions.NiniException;
 
-public class SortCommand extends Command{
+public class SortCommand extends Command {
     @Override
-    public void execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
+    public void execute(TaskList taskList, Ui ui, Storage storage) {
         taskList.sortTasks();
-        Ui.printLineWithMessage("Tasks sorted by date!");
+        ui.printLineWithMessage("Tasks sorted by date!");
     }
 }
