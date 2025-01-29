@@ -1,4 +1,3 @@
-
 import java.util.Scanner;
 
 import commands.Command;
@@ -7,33 +6,45 @@ import components.Storage;
 import components.TaskList;
 import components.Ui;
 import exceptions.NiniException;
-import exceptions.InvalidFormatException;
-import exceptions.InvalidTaskNumberException;
-import tasks.DeadlineTask;
-import tasks.EventTask;
-import tasks.Task;
-import tasks.ToDoTask;
 
+/**
+ * The main class for the NiniNana task management application.
+ * It handles user input, processes commands, and manages tasks.
+ */
 public class NiniNana {
     private final Ui ui;
     private final Storage storage;
     private final TaskList taskList;
     private final Parser parser;
-
-    private static final String FILENAME = "./data/chat.txt";
     private final Scanner scanner;
 
+    /**
+     * Constructs a NiniNana instance with specified components.
+     *
+     * @param ui       The user interface handler.
+     * @param storage  The storage system for saving and loading tasks.
+     * @param parser   The parser for processing user input.
+     * @param scanner  The scanner for reading user input.
+     */
     public NiniNana(Ui ui, Storage storage, Parser parser, Scanner scanner) {
         this.ui = ui;
         this.storage = storage;
         this.parser = parser;
-        this.taskList = new TaskList(storage.loadTasks());
+        taskList = new TaskList(storage.loadTasks());
         this.scanner = scanner;
     }
+
+    /**
+     * Constructs a NiniNana instance with default components.
+     */
     public NiniNana() {
         this(new Ui(), new Storage(), new Parser(), new Scanner(System.in));
     }
 
+    /**
+     * Starts the task management application.
+     * Continuously reads user input, processes commands, and updates tasks.
+     */
     public void run() {
         ui.showGreeting();
 
@@ -58,6 +69,11 @@ public class NiniNana {
 
     }
 
+    /**
+     * The main entry point of the application.
+     *
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         new NiniNana().run();
     }

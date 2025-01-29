@@ -7,48 +7,101 @@ import exceptions.NiniException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+/**
+ * Represents a generic task with a description and completion status.
+ * This class serves as a base class for different types of tasks such as
+ * ToDoTask, DeadlineTask, and EventTask.
+ */
 public class Task {
     protected String description;
     protected boolean isDone;
 
+    /**
+     * Constructs a new {@code Task} with the given description.
+     * The task is initially marked as not done.
+     *
+     * @param description The description of the task.
+     */
     public Task (String description) {
         this.description = description;
-        this.isDone = false;
+        isDone = false;
     }
 
+    /**
+     * Constructs a new {@code Task} with the given description and completion status.
+     *
+     * @param description The description of the task.
+     * @param isDone      The completion status of the task. {@code true} if the task is completed, {@code false} otherwise.
+     */
     public Task (String description, boolean isDone) {
         this(description);
         this.isDone = isDone;
     }
 
+    /**
+     * Returns the description of the task.
+     *
+     * @return The task description.
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Returns the completion status of the task.
+     *
+     * @return {@code true} if the task is completed, {@code false} otherwise.
+     */
     public boolean isDone() {
         return isDone;
     }
 
+    /**
+     * Marks the task as done.
+     *
+     * @throws IllegalStateException If the task is already marked as done.
+     */
     public void markAsDone() {
-        if (this.isDone) {
+        if (isDone) {
             throw new IllegalStateException("Task is already marked as done");
         } else {
-            this.isDone = true;
+            isDone = true;
         }
     }
 
+
+    /**
+     * Unmarks the task, setting it as not done.
+     *
+     * @throws IllegalStateException If the task is already unmarked.
+     */
     public void unmark() {
-        if (!this.isDone) {
+        if (!isDone) {
             throw new IllegalStateException("Task is already unmarked.");
         } else {
-            this.isDone = false;
+            isDone = false;
         }
     }
 
+    /**
+     * Serializes the task into a string format.
+     * This method is intended to be overridden by subclasses.
+     *
+     * @return A serialized string representation of the task.
+     */
     public String serialize() {
         return null;
     };
 
+    /**
+     * Deserializes a given string into a {@code Task} object.
+     * The string format should follow the pattern used in the {@code serialize} method.
+     *
+     * @param data The serialized string representation of a task.
+     * @return A {@code Task} object reconstructed from the serialized data.
+     * @throws NiniException If the data is invalid, incorrectly formatted, or incomplete.
+     */
     public static Task deserialize(String data) throws NiniException {
         if (data == null || data.isEmpty()) {
             throw new InvalidDataException("Error: Cannot deserialize null or empty data.");
@@ -99,7 +152,16 @@ public class Task {
         }
     }
 
-
+    /**
+     * Returns a string representation of the task.
+     * The format is {@code [<status>] <description>}, where:
+     * <ul>
+     *     <li>{@code X} indicates the task is completed.</li>
+     *     <li>{@code " "} (space) indicates the task is not completed.</li>
+     * </ul>
+     *
+     * @return A formatted string representing the task.
+     */
     @Override
     public String toString() {
         return String.format("[%s] %s", isDone ? "X" : " ", description);

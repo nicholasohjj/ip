@@ -6,12 +6,33 @@ import components.Ui;
 import exceptions.InvalidTaskNumberException;
 import exceptions.NiniException;
 
+/**
+ * Represents a command to unmark a task as not done.
+ * This command updates the task's status, notifies the user, and updates storage.
+ */
 public class UnmarkCommand extends Command{
     private final int unmarkIndex;
 
+
+    /**
+     * Constructs an {@code UnmarkCommand} with the specified task index.
+     *
+     * @param unmarkIndex The index of the task to be unmarked as not done (zero-based).
+     */
     public UnmarkCommand(int unmarkIndex) {
         this.unmarkIndex = unmarkIndex;
     }
+
+    /**
+     * Executes the unmark task command.
+     * Marks the specified task as not done, displays a confirmation message,
+     * and updates the storage.
+     *
+     * @param taskList The task list containing the task.
+     * @param ui       The user interface for displaying messages.
+     * @param storage  The storage component responsible for saving tasks.
+     * @throws NiniException If the task index is invalid or an error occurs while updating storage.
+     */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
         if (taskList.isValidIndex(unmarkIndex)) {
@@ -27,7 +48,12 @@ public class UnmarkCommand extends Command{
         }
     }
 
+    /**
+     * Returns the index of the task to be unmarked.
+     *
+     * @return The zero-based index of the task.
+     */
     public int getTaskIndex() {
-        return this.unmarkIndex;
+        return unmarkIndex;
     }
 }

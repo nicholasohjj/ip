@@ -4,14 +4,25 @@ import commands.*;
 
 import exceptions.InvalidCommandException;
 import exceptions.InvalidFormatException;
-import exceptions.MissingArgumentException;
 import exceptions.NiniException;
 import tasks.DeadlineTask;
 import tasks.EventTask;
 import tasks.ToDoTask;
 
+/**
+ * Parses user input and returns the corresponding {@code Command} object.
+ * This class processes different commands and extracts necessary arguments
+ * for task operations such as adding, marking, unmarking, deleting, and sorting tasks.
+ */
 public class Parser {
 
+    /**
+     * Parses the user input and returns the appropriate {@code Command} object.
+     *
+     * @param input The raw input string entered by the user.
+     * @return A {@code Command} object corresponding to the parsed input.
+     * @throws NiniException If the input command is invalid or has missing/incorrect arguments.
+     */
     public Command parseCommand(String input) throws NiniException {
         String[] parts = input.split(" ", 2);
         String commandType = parts[0].toLowerCase();

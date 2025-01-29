@@ -7,11 +7,24 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Represents a deadline task with a specific due date and time.
+ * This class extends {@code Task} and includes functionality to store,
+ * validate, and format the deadline.
+ */
 public class DeadlineTask extends Task {
-    private final LocalDateTime deadline;
     private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
     private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
+    private final LocalDateTime deadline;
 
+    /**
+     * Constructs a new {@code DeadlineTask} with the given description and deadline.
+     * The task is initially marked as not done.
+     *
+     * @param description The description of the deadline task.
+     * @param deadline    The deadline of the task in the format {@code d/M/yyyy HHmm}.
+     * @throws NiniException If the provided date-time format is invalid.
+     */
     public DeadlineTask(String description, String deadline) throws NiniException {
         super(description);
         try {
@@ -21,6 +34,14 @@ public class DeadlineTask extends Task {
         }
     }
 
+    /**
+     * Constructs a new {@code DeadlineTask} with the given description, deadline, and completion status.
+     *
+     * @param description The description of the deadline task.
+     * @param deadline    The deadline of the task in the format {@code d/M/yyyy HHmm}.
+     * @param isDone      The completion status of the task. {@code true} if the task is completed, {@code false} otherwise.
+     * @throws NiniException If the provided date-time format is invalid.
+     */
     public DeadlineTask(String description, String deadline, boolean isDone) throws NiniException {
         super(description, isDone);
         try {
@@ -30,15 +51,42 @@ public class DeadlineTask extends Task {
         }
     }
 
+    /**
+     * Returns the deadline date and time of the task.
+     *
+     * @return The {@code LocalDateTime} representing the task's deadline.
+     */
     public LocalDateTime getDeadline() {
-        return this.deadline;
+        return deadline;
     }
 
+    /**
+     * Serializes the deadline task into a formatted string representation.
+     * The format used is: {@code D|<status>|<description>|<deadline>}, where:
+     * <ul>
+     *     <li>{@code D} represents a deadline task.</li>
+     *     <li>{@code <status>} is {@code 1} if the task is done, otherwise {@code 0}.</li>
+     *     <li>{@code <description>} is the textual description of the task.</li>
+     *     <li>{@code <deadline>} is the formatted deadline date and time.</li>
+     * </ul>
+     *
+     * @return A serialized string representation of the deadline task.
+     */
     @Override
     public String serialize() {
         return String.format("D|%d|%s|%s", isDone ? 1 : 0, description, deadline.format(INPUT_FORMATTER));
     }
 
+    /**
+     * Returns a string representation of the deadline task.
+     * The format is {@code [D]<description> (deadline: <deadline time>)}, where:
+     * <ul>
+     *     <li>{@code [D]} signifies a deadline task.</li>
+     *     <li>{@code <deadline time>} is formatted using {@code MMM dd yyyy, h:mma}.</li>
+     * </ul>
+     *
+     * @return A formatted string representing the deadline task.
+     */
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (deadline: " + deadline.format(OUTPUT_FORMATTER) + ")";
