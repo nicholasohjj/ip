@@ -6,9 +6,6 @@ import tasks.DeadlineTask;
 import tasks.EventTask;
 import tasks.Task;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class TaskListTest {
