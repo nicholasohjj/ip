@@ -1,7 +1,15 @@
 package components;
 
-import commands.*;
 
+import commands.AddCommand;
+import commands.Command;
+import commands.DeleteCommand;
+import commands.ExitCommand;
+import commands.FindCommand;
+import commands.ListCommand;
+import commands.MarkCommand;
+import commands.SortCommand;
+import commands.UnmarkCommand;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidFormatException;
 import exceptions.NiniException;
@@ -48,6 +56,8 @@ public class Parser {
             return new SortCommand();
         case "delete":
             return new DeleteCommand(parseIndex(details));
+        case "find":
+            return new FindCommand(details);
         default:
             throw new InvalidCommandException("Unknown command");
         }
