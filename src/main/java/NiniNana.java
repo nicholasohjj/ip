@@ -1,3 +1,7 @@
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import commands.Command;
@@ -5,13 +9,16 @@ import components.Parser;
 import components.Storage;
 import components.TaskList;
 import components.Ui;
+
 import exceptions.NiniException;
+import tasks.Task;
 
 /**
  * The main class for the NiniNana task management application.
  * It handles user input, processes commands, and manages tasks.
  */
 public class NiniNana {
+
     private final Ui ui;
     private final Storage storage;
     private final TaskList taskList;
@@ -30,8 +37,17 @@ public class NiniNana {
         this.ui = ui;
         this.storage = storage;
         this.parser = parser;
-        taskList = new TaskList(storage.loadTasks());
         this.scanner = scanner;
+
+        List<Task> tasks;
+        try {
+            tasks = storage.loadTasks();
+        } catch (IOException | NiniException e) {
+            ui.showError("Error loading tasks: " + e.getMessage());
+            tasks = new ArrayList<>(); // Provide an empty list if loading fails
+        }
+
+        this.taskList = new TaskList(tasks);
     }
 
     /**
@@ -51,22 +67,17 @@ public class NiniNana {
         while (true) {
             try {
                 String input = scanner.nextLine().trim();
-
                 if (!input.isEmpty()) {
                     Command command = parser.parseCommand(input);
                     command.execute(taskList, ui, storage);
-
                     if (command.isExit()) {
                         break;
                     }
                 }
-
-
             } catch (NiniException e) {
                 ui.showError(e.getMessage());
             }
         }
-
     }
 
     /**

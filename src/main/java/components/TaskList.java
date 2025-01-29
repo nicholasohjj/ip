@@ -5,6 +5,7 @@ import tasks.EventTask;
 import tasks.Task;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.ArrayList;
 
 /**
@@ -12,7 +13,8 @@ import java.util.ArrayList;
  * retrieve, and sort tasks based on deadlines or event start times.
  */
 public class TaskList {
-    private final ArrayList<Task> tasks;
+    
+    private final List<Task> tasks;
 
     /**
      * Constructs an empty {@code TaskList}.
@@ -26,7 +28,7 @@ public class TaskList {
      *
      * @param tasks The list of tasks to initialize the task list with.
      */
-    public TaskList(ArrayList<Task> tasks) {
+    public TaskList(List<Task> tasks) {
         this.tasks = tasks;
     }
 
@@ -35,7 +37,7 @@ public class TaskList {
      *
      * @return The {@code ArrayList} containing all tasks.
      */
-    public ArrayList<Task> getTasks() {
+    public List<Task> getTasks() {
         return tasks;
     }
 
@@ -49,12 +51,24 @@ public class TaskList {
     }
 
     /**
+     * Returns the number of tasks in the task list.
+     *
+     * @return The total number of tasks.
+     */
+    public int size() {
+        return tasks.size();
+    }
+
+    /**
      * Removes a task from the task list at the specified index.
      *
      * @param index The index of the task to be removed.
      * @return The removed task.
      */
     public Task removeTask(int index) {
+        if (!isValidIndex(index)) {
+            throw new IndexOutOfBoundsException("Error: Invalid task index.");
+        }
         return tasks.remove(index);
     }
 
@@ -65,6 +79,9 @@ public class TaskList {
      * @return The task at the given index.
      */
     public Task getTask(int index) {
+        if (!isValidIndex(index)) {
+            throw new IndexOutOfBoundsException("Error: Invalid task index.");
+        }
         return tasks.get(index);
     }
 
@@ -74,6 +91,9 @@ public class TaskList {
      * @param index The index of the task to mark as done.
      */
     public void markTask(int index) {
+        if (!isValidIndex(index)) {
+            throw new IndexOutOfBoundsException("Error: Invalid task index.");
+        }
         tasks.get(index).markAsDone();
     }
 
@@ -83,16 +103,10 @@ public class TaskList {
      * @param index The index of the task to unmark.
      */
     public void unmarkTask(int index) {
+        if (!isValidIndex(index)) {
+            throw new IndexOutOfBoundsException("Error: Invalid task index.");
+        }
         tasks.get(index).unmark();
-    }
-
-    /**
-     * Returns the number of tasks in the task list.
-     *
-     * @return The total number of tasks.
-     */
-    public int size() {
-        return tasks.size();
     }
 
     /**
@@ -116,30 +130,22 @@ public class TaskList {
      */
     public void sortTasks() {
         tasks.sort((task1, task2) -> {
-            LocalDateTime date1 = null;
-            LocalDateTime date2 = null;
+            LocalDateTime date1 = getTaskDate(task1);
+            LocalDateTime date2 = getTaskDate(task2);
 
-            if (task1 instanceof DeadlineTask) {
-                date1 = ((DeadlineTask) task1).getDeadline();
-            } else if (task1 instanceof EventTask) {
-                date1 = ((EventTask) task1).getStartDateTime(); // Assume tasks.EventTask has a startDateTime field
-            }
-
-            if (task2 instanceof DeadlineTask) {
-                date2 = ((DeadlineTask) task2).getDeadline();
-            } else if (task2 instanceof EventTask) {
-                date2 = ((EventTask) task2).getStartDateTime();
-            }
-
-            if (date1 == null && date2 == null) {
-                return 0;
-            } else if (date1 == null) {
-                return 1; // Null dates go to the end
-            } else if (date2 == null) {
-                return -1; // Null dates go to the end
-            } else {
-                return date1.compareTo(date2); // Compare the dates
-            }
+            if (date1 == null && date2 == null) return 0;
+            if (date1 == null) return 1;
+            if (date2 == null) return -1;
+            return date1.compareTo(date2);
         });
+    }
+
+    private LocalDateTime getTaskDate(Task task) {
+        if (task instanceof DeadlineTask) {
+            return ((DeadlineTask) task).getDeadline();
+        } else if (task instanceof EventTask) {
+            return ((EventTask) task).getStartDateTime();
+        }
+        return null;
     }
 }

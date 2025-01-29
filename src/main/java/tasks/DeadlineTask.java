@@ -13,6 +13,7 @@ import java.time.format.DateTimeParseException;
  * validate, and format the deadline.
  */
 public class DeadlineTask extends Task {
+
     private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
     private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
     private final LocalDateTime deadline;
@@ -27,11 +28,7 @@ public class DeadlineTask extends Task {
      */
     public DeadlineTask(String description, String deadline) throws NiniException {
         super(description);
-        try {
-            this.deadline = LocalDateTime.parse(deadline.trim(), INPUT_FORMATTER);
-        } catch (DateTimeParseException e) {
-            throw new InvalidFormatException("Invalid deadline format. Please use the format: d/M/yyyy HHmm (e.g., 25/12/2025 1800)");
-        }
+        this.deadline = parseDeadline(deadline);
     }
 
     /**
@@ -44,8 +41,12 @@ public class DeadlineTask extends Task {
      */
     public DeadlineTask(String description, String deadline, boolean isDone) throws NiniException {
         super(description, isDone);
+        this.deadline = parseDeadline(deadline);
+    }
+
+    private LocalDateTime parseDeadline(String deadline) throws InvalidFormatException {
         try {
-            this.deadline = LocalDateTime.parse(deadline.trim(), INPUT_FORMATTER);
+            return LocalDateTime.parse(deadline.trim(), INPUT_FORMATTER);
         } catch (DateTimeParseException e) {
             throw new InvalidFormatException("Invalid deadline format. Please use the format: d/M/yyyy HHmm (e.g., 25/12/2025 1800)");
         }
@@ -74,7 +75,12 @@ public class DeadlineTask extends Task {
      */
     @Override
     public String serialize() {
-        return String.format("D|%d|%s|%s", isDone ? 1 : 0, description, deadline.format(INPUT_FORMATTER));
+        int isDoneValue = isDone ? 1 : 0;
+        return String.format("D|%d|%s|%s",
+                isDoneValue,
+                description,
+                deadline.format(INPUT_FORMATTER)
+        );
     }
 
     /**
@@ -89,6 +95,10 @@ public class DeadlineTask extends Task {
      */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (deadline: " + deadline.format(OUTPUT_FORMATTER) + ")";
+        return String.format("[D]%s (deadline: %s)",
+                super.toString(),
+                deadline.format(OUTPUT_FORMATTER)
+        );
     }
+
 }

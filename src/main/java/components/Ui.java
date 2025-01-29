@@ -3,31 +3,16 @@ package components;
 import tasks.Task;
 
 import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Handles user interface interactions by displaying messages to the user.
  * This class provides methods to print system messages, task lists, and error messages.
  */
 public class Ui {
+
     private static final String LINE = "____________________________________________________________";
-
-    /**
-     * Prints a horizontal line to separate sections in the output.
-     */
-    public static void printLine() {
-        System.out.println(LINE);
-    }
-
-    /**
-     * Prints a horizontal line along with a specified message.
-     *
-     * @param message The message to be displayed between the lines.
-     */
-    public static void printLineWithMessage(String message) {
-        printLine();
-        System.out.println(message);
-        printLine();
-    }
 
     /**
      * Displays a greeting message when the program starts.
@@ -57,7 +42,7 @@ public class Ui {
      *
      * @param tasks The list of tasks to be displayed.
      */
-    public void showTaskList(ArrayList<Task> tasks) {
+    public void showTaskList(List<Task> tasks) {
         printLine();
         if (tasks.isEmpty()) {
             System.out.println("The list is empty.");
@@ -77,7 +62,9 @@ public class Ui {
      * @param size The total number of tasks after the addition.
      */
     public void showTaskAdded(Task task, int size) {
-        printLineWithMessage(String.format("Got it. I've added this task:\n  %s\nNow you have %d tasks in the list.", task, size));
+        printLineWithMessage(String.format(
+                "Got it. I've added this task:\n  %s\nNow you have %d tasks in the list.",
+                task, size));
     }
 
     /**
@@ -87,6 +74,27 @@ public class Ui {
      * @param size The total number of tasks after the removal.
      */
     public void showTaskRemoved(Task task, int size) {
-        printLineWithMessage(String.format("Noted. I've removed this task:\n  %s\nNow you have %d tasks in the list.", task, size));
+        printLineWithMessage(String.format(
+                "Noted. I've removed this task:\n  %s\nNow you have %d tasks in the list.",
+                task, size));
     }
+
+    /**
+     * Prints a horizontal line to separate sections in the output.
+     */
+    public void printLine() {
+        System.out.println(LINE);
+    }
+
+    /**
+     * Prints a horizontal line along with a specified message.
+     *
+     * @param message The message to be displayed between the lines.
+     */
+    public void printLineWithMessage(String message) {
+        printLine();
+        System.out.println(message);
+        printLine();
+    }
+
 }

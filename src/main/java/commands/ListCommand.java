@@ -10,7 +10,7 @@ import components.Storage;
  * Represents a command to display the list of tasks.
  * This command retrieves the tasks from the task list and displays them to the user.
  */
-public class ListCommand extends Command{
+public class ListCommand extends Command {
 
     /**
      * Executes the list command.

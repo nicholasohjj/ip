@@ -1,5 +1,7 @@
 package commands;
 
+import java.io.IOException;
+
 import components.Storage;
 import components.TaskList;
 import components.Ui;
@@ -10,7 +12,8 @@ import exceptions.NiniException;
  * Represents a command to unmark a task as not done.
  * This command updates the task's status, notifies the user, and updates storage.
  */
-public class UnmarkCommand extends Command{
+public class UnmarkCommand extends Command {
+
     private final int unmarkIndex;
 
 
@@ -35,16 +38,18 @@ public class UnmarkCommand extends Command{
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
-        if (taskList.isValidIndex(unmarkIndex)) {
-            try {
-                taskList.unmarkTask(unmarkIndex);
-                Ui.printLineWithMessage("OK, I've marked this task as not done yet:\n  " + taskList.getTask(unmarkIndex));
-                storage.overwriteTasks(taskList.getTasks());
-            } catch (IllegalStateException e) {
-                ui.showError(e.getMessage());
-            }
-        } else {
+        if (!taskList.isValidIndex(unmarkIndex)) {
             throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and " + taskList.size() + ".");
+        }
+
+        try {
+            taskList.unmarkTask(unmarkIndex);
+            ui.printLineWithMessage("OK, I've marked this task as not done yet:\n  " + taskList.getTask(unmarkIndex));
+            storage.overwriteTasks(taskList.getTasks());
+        } catch (IllegalStateException e) {
+            ui.showError("Error: Task is already unmarked.");
+        } catch (IOException e) {
+            ui.showError("Error saving updated task list: " + e.getMessage());
         }
     }
 
@@ -53,7 +58,7 @@ public class UnmarkCommand extends Command{
      *
      * @return The zero-based index of the task.
      */
-    public int getTaskIndex() {
-        return unmarkIndex;
+    public int getUnmarkIndex() {
+        return this.unmarkIndex;
     }
 }

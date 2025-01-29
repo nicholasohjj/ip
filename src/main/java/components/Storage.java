@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.BufferedWriter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -17,13 +18,15 @@ import java.util.Scanner;
  * persistence of task lists between program runs.
  */
 public class Storage {
+    private static final String DEFAULT_FILE_PATH = "./data/chat.txt";
+
     private final String fileName;
 
     /**
      * Constructs a {@code Storage} object with the default file path {@code ./data/chat.txt}.
      */
     public Storage() {
-        fileName = "./data/chat.txt";
+        fileName = DEFAULT_FILE_PATH;
     }
 
     /**
@@ -40,13 +43,10 @@ public class Storage {
      * If the directory does not exist, it attempts to create it.
      * Displays an error message if the directory creation fails.
      */
-    private void ensureFileDirectoryExists() {
+    private void ensureFileDirectoryExists() throws IOException {
         File directory = new File(new File(fileName).getParent());
-        if (!directory.exists()) {
-            boolean isCreated = directory.mkdirs();
-            if (!isCreated) {
-                Ui.printLineWithMessage("Failed to create the 'data' directory for saving tasks.");
-            }
+        if (!directory.exists() && !directory.mkdirs()) {
+            throw new IOException("Failed to create the 'data' directory for saving tasks.");
         }
     }
 
@@ -57,8 +57,8 @@ public class Storage {
      *
      * @return An {@code ArrayList} of tasks loaded from the file.
      */
-    public ArrayList<Task> loadTasks() {
-        ArrayList<Task> tasks = new ArrayList<>();
+    public List<Task> loadTasks() throws IOException, NiniException {
+        List<Task> tasks = new ArrayList<>();
         File file = new File(fileName);
 
         if (!file.exists()) {
@@ -71,12 +71,7 @@ public class Storage {
                 Task task = Task.deserialize(line);
                 tasks.add(task);
             }
-        } catch (IOException e) {
-            Ui.printLineWithMessage("Error loading tasks: " + e.getMessage());
-        } catch (NiniException e) {
-            Ui.printLineWithMessage(e.getMessage());
         }
-
         return tasks;
     }
 
@@ -86,12 +81,10 @@ public class Storage {
      * @param task The task to be saved.
      * @throws NiniException If an error occurs while writing to the file.
      */
-    public void saveTask(Task task) throws NiniException {
+    public void saveTask(Task task) throws IOException {
         ensureFileDirectoryExists();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
             writer.write(task.serialize() + System.lineSeparator());
-        } catch (IOException e) {
-            throw new NiniException("Error saving task: " + e.getMessage());
         }
     }
 
@@ -102,14 +95,12 @@ public class Storage {
      * @param tasks The list of tasks to be saved.
      * @throws NiniException If an error occurs while writing to the file.
      */
-    public void overwriteTasks(ArrayList<Task> tasks) throws NiniException {
+    public void overwriteTasks(List<Task> tasks) throws IOException {
         ensureFileDirectoryExists();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for (Task task : tasks) {
                 writer.write(task.serialize() + System.lineSeparator());
             }
-        } catch (IOException e) {
-            throw new NiniException("Error overwriting tasks: " + e.getMessage());
         }
     }
 }

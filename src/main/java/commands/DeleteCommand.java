@@ -1,5 +1,7 @@
 package commands;
 
+import java.io.IOException;
+
 import exceptions.InvalidTaskNumberException;
 import exceptions.NiniException;
 
@@ -13,7 +15,7 @@ import tasks.Task;
  * Represents a command to delete a task from the task list.
  * This command removes a task from the list, updates storage, and notifies the user.
  */
-public class DeleteCommand extends Command{
+public class DeleteCommand extends Command {
 
     private final int taskIndex;
 
@@ -38,12 +40,16 @@ public class DeleteCommand extends Command{
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
-        if (taskList.isValidIndex(taskIndex)) {
+        if (!taskList.isValidIndex(taskIndex)) {
+            throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and " + taskList.size() + ".");
+        }
+
+        try {
             Task removedTask = taskList.removeTask(taskIndex);
             ui.showTaskRemoved(removedTask, taskList.size());
             storage.overwriteTasks(taskList.getTasks());
-        } else {
-            throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and " + taskList.size() + ".");
+        } catch (IOException e) {
+            ui.showError("Error saving updated task list: " + e.getMessage());
         }
     }
 
@@ -52,7 +58,7 @@ public class DeleteCommand extends Command{
      *
      * @return The zero-based index of the task.
      */
-    public int getTaskIndex() {
+    public int getDeleteIndex() {
         return this.taskIndex;
     }
 }

@@ -1,5 +1,7 @@
 package commands;
 
+import java.io.IOException;
+
 import components.Storage;
 import components.TaskList;
 import components.Ui;
@@ -10,7 +12,8 @@ import tasks.Task;
  * Represents a command to add a task to the task list.
  * This command updates the task list, notifies the user, and saves the task to storage.
  */
-public class AddCommand extends Command{
+public class AddCommand extends Command {
+
     private final Task task;
 
     /**
@@ -33,10 +36,15 @@ public class AddCommand extends Command{
      * @throws NiniException If an error occurs while saving the task.
      */
     @Override
-    public void execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
+    public void execute(TaskList taskList, Ui ui, Storage storage) {
         taskList.addTask(task);
         ui.showTaskAdded(task, taskList.size());
-        storage.saveTask(task);
+
+        try {
+            storage.saveTask(task);
+        } catch (IOException e) {
+            ui.showError(e.getMessage());
+        }
     }
 
     /**
@@ -44,7 +52,7 @@ public class AddCommand extends Command{
      *
      * @return The task that was added.
      */
-    public Task getTask() {
-        return task;
+    public Task getAddedTask() {
+        return this.task;
     }
 }

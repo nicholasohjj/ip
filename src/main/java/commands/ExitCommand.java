@@ -1,7 +1,5 @@
 package commands;
 
-import exceptions.NiniException;
-
 import components.Ui;
 import components.TaskList;
 import components.Storage;
@@ -10,7 +8,7 @@ import components.Storage;
  * Represents a command to exit the program.
  * This command displays a goodbye message and signals the application to terminate.
  */
-public class ExitCommand extends Command{
+public class ExitCommand extends Command {
 
     /**
      * Executes the exit command.

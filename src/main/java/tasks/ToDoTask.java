@@ -24,7 +24,7 @@ public class ToDoTask extends Task {
      * @param isDone      The completion status of the task. {@code true} if the task is completed, {@code false} otherwise.
      */
     public ToDoTask(String description, boolean isDone) {
-        super(description,isDone);
+        super(description, isDone);
     }
 
     /**
