@@ -96,12 +96,14 @@ public class Parser {
     private Command parseEvent(String details) throws NiniException {
         validateArguments(details, "Description cannot be empty for event");
         if (!details.contains("/from") || !details.contains("/to")) {
-            throw new InvalidFormatException("Invalid format for event. Use: event <description> /from <start> /to <end>");
+            throw new InvalidFormatException("Invalid format for event."
+                    + " Use: event <description> /from <start> /to <end>");
         }
 
         String[] eventParts = details.split("/from|/to", 3);
         if (eventParts.length < 3) {
-            throw new InvalidFormatException("Invalid format for event. Use: event <description> /from <start> /to <end>");
+            throw new InvalidFormatException("Invalid format for event."
+                    + "Use: event <description> /from <start> /to <end>");
         }
         validateArguments(eventParts[0].trim(), "Description cannot be empty");
 

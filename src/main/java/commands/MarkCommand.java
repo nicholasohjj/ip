@@ -38,7 +38,8 @@ public class MarkCommand extends Command {
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
         if (!taskList.isValidIndex(markIndex)) {
-            throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and " + taskList.size() + ".");
+            throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
+                    + taskList.size() + ".");
         }
 
         try {

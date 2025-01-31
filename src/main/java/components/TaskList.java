@@ -1,19 +1,19 @@
 package components;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import tasks.DeadlineTask;
 import tasks.EventTask;
 import tasks.Task;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Manages a list of tasks, providing methods to add, remove, mark, unmark,
  * retrieve, and sort tasks based on deadlines or event start times.
  */
 public class TaskList {
-    
+
     private final List<Task> tasks;
 
     /**
@@ -133,9 +133,15 @@ public class TaskList {
             LocalDateTime date1 = getTaskDate(task1);
             LocalDateTime date2 = getTaskDate(task2);
 
-            if (date1 == null && date2 == null) return 0;
-            if (date1 == null) return 1;
-            if (date2 == null) return -1;
+            if (date1 == null && date2 == null) {
+                return 0;
+            }
+            if (date1 == null) {
+                return 1;
+            }
+            if (date2 == null) {
+                return -1;
+            }
             return date1.compareTo(date2);
         });
     }

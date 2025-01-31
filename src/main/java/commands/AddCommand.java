@@ -5,7 +5,6 @@ import java.io.IOException;
 import components.Storage;
 import components.TaskList;
 import components.Ui;
-import exceptions.NiniException;
 import tasks.Task;
 
 /**
@@ -33,7 +32,6 @@ public class AddCommand extends Command {
      * @param taskList The task list to which the task is added.
      * @param ui       The user interface for displaying messages.
      * @param storage  The storage component responsible for saving tasks.
-     * @throws NiniException If an error occurs while saving the task.
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) {

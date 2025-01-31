@@ -21,7 +21,8 @@ public class ToDoTask extends Task {
      * Constructs a new {@code ToDoTask} with the given description and status.
      *
      * @param description The description of the to-do task.
-     * @param isDone      The completion status of the task. {@code true} if the task is completed, {@code false} otherwise.
+     * @param isDone      The completion status of the task.
+     *                    {@code true} if the task is completed, {@code false} otherwise.
      */
     public ToDoTask(String description, boolean isDone) {
         super(description, isDone);

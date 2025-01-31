@@ -1,11 +1,11 @@
 package tasks;
 
-import exceptions.InvalidFormatException;
-import exceptions.NiniException;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import exceptions.InvalidFormatException;
+import exceptions.NiniException;
 
 /**
  * Represents a deadline task with a specific due date and time.
@@ -36,7 +36,8 @@ public class DeadlineTask extends Task {
      *
      * @param description The description of the deadline task.
      * @param deadline    The deadline of the task in the format {@code d/M/yyyy HHmm}.
-     * @param isDone      The completion status of the task. {@code true} if the task is completed, {@code false} otherwise.
+     * @param isDone      The completion status of the task.
+     *                    {@code true} if the task is completed, {@code false} otherwise.
      * @throws NiniException If the provided date-time format is invalid.
      */
     public DeadlineTask(String description, String deadline, boolean isDone) throws NiniException {
@@ -48,7 +49,8 @@ public class DeadlineTask extends Task {
         try {
             return LocalDateTime.parse(deadline.trim(), INPUT_FORMATTER);
         } catch (DateTimeParseException e) {
-            throw new InvalidFormatException("Invalid deadline format. Please use the format: d/M/yyyy HHmm (e.g., 25/12/2025 1800)");
+            throw new InvalidFormatException("Invalid deadline format. Please use the format: "
+                    + "d/M/yyyy HHmm (e.g., 25/12/2025 1800)");
         }
     }
 

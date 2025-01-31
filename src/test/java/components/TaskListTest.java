@@ -1,12 +1,18 @@
 package components;
 
-import exceptions.NiniException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.api.Test;
+
+import exceptions.NiniException;
 import tasks.DeadlineTask;
 import tasks.EventTask;
 import tasks.Task;
 
-import static org.junit.jupiter.api.Assertions.*;
+
 
 class TaskListTest {
 

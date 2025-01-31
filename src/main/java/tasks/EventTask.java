@@ -1,11 +1,11 @@
 package tasks;
 
-import exceptions.InvalidFormatException;
-import exceptions.NiniException;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import exceptions.InvalidFormatException;
+import exceptions.NiniException;
 
 /**
  * Represents an event task with a specific start and end time.
@@ -41,7 +41,8 @@ public class EventTask extends Task {
      * @param description The description of the event.
      * @param from        The start time of the event in the format {@code d/M/yyyy HHmm}.
      * @param to          The end time of the event in the format {@code d/M/yyyy HHmm}.
-     * @param isDone      The completion status of the event. {@code true} if the event is completed, {@code false} otherwise.
+     * @param isDone      The completion status of the event.
+     *                    {@code true} if the event is completed, {@code false} otherwise.
      * @throws NiniException If the provided date-time format is invalid or the start time is after the end time.
      */
     public EventTask(String description, String from, String to, boolean isDone) throws NiniException {
@@ -53,7 +54,8 @@ public class EventTask extends Task {
                 throw new InvalidFormatException("The start time must be earlier than the end time.");
             }
         } catch (DateTimeParseException e) {
-            throw new InvalidFormatException("Invalid deadline format. Please use the format: d/M/yyyy HHmm (e.g., 25/12/2025 1800)");
+            throw new InvalidFormatException("Invalid deadline format. Please use the format: "
+                    + "d/M/yyyy HHmm (e.g., 25/12/2025 1800)");
         }
     }
 
@@ -61,7 +63,8 @@ public class EventTask extends Task {
         try {
             return LocalDateTime.parse(dateTime.trim(), INPUT_FORMATTER);
         } catch (DateTimeParseException e) {
-            throw new InvalidFormatException("Invalid deadline format. Please use the format: d/M/yyyy HHmm (e.g., 25/12/2025 1800)");
+            throw new InvalidFormatException("Invalid deadline format. Please use the format: "
+                    + "d/M/yyyy HHmm (e.g., 25/12/2025 1800)");
         }
     }
 

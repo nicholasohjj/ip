@@ -1,13 +1,25 @@
 package components;
 
-import commands.*;
-import exceptions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
+
+import commands.AddCommand;
+import commands.Command;
+import commands.DeleteCommand;
+import commands.ExitCommand;
+import commands.ListCommand;
+import commands.MarkCommand;
+import commands.SortCommand;
+import commands.UnmarkCommand;
+import exceptions.InvalidCommandException;
+import exceptions.InvalidFormatException;
+import exceptions.NiniException;
 import tasks.DeadlineTask;
 import tasks.EventTask;
 import tasks.ToDoTask;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ParserTest {
 
