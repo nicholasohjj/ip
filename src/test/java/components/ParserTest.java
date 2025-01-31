@@ -38,7 +38,7 @@ class ParserTest {
         Parser parser = new Parser();
         Command command = parser.parseCommand("unmark 2");
         assertTrue(command instanceof UnmarkCommand);
-        assertEquals(1, ((UnmarkCommand) command).getTaskIndex());
+        assertEquals(1, ((UnmarkCommand) command).getUnmarkIndex());
     }
 
     @Test
@@ -46,8 +46,8 @@ class ParserTest {
         Parser parser = new Parser();
         Command command = parser.parseCommand("todo Buy groceries");
         assertTrue(command instanceof AddCommand);
-        assertTrue(((AddCommand) command).getTask() instanceof ToDoTask);
-        assertEquals("Buy groceries", ((AddCommand) command).getTask().getDescription());
+        assertTrue(((AddCommand) command).getAddedTask() instanceof ToDoTask);
+        assertEquals("Buy groceries", ((AddCommand) command).getAddedTask().getDescription());
     }
 
     @Test
@@ -55,8 +55,8 @@ class ParserTest {
         Parser parser = new Parser();
         Command command = parser.parseCommand("event Meeting /from 1/1/2025 1000 /to 1/1/2025 1200");
         assertTrue(command instanceof AddCommand);
-        assertTrue(((AddCommand) command).getTask() instanceof EventTask);
-        EventTask task = (EventTask) ((AddCommand) command).getTask();
+        assertTrue(((AddCommand) command).getAddedTask() instanceof EventTask);
+        EventTask task = (EventTask) ((AddCommand) command).getAddedTask();
         assertEquals("Meeting", task.getDescription());
         assertEquals("2025-01-01T10:00", task.getStartDateTime().toString());
         assertEquals("2025-01-01T12:00", task.getEndDateTime().toString());
@@ -67,8 +67,8 @@ class ParserTest {
         Parser parser = new Parser();
         Command command = parser.parseCommand("deadline Submit report /by 1/1/2025 1800");
         assertTrue(command instanceof AddCommand);
-        assertTrue(((AddCommand) command).getTask() instanceof DeadlineTask);
-        DeadlineTask task = (DeadlineTask) ((AddCommand) command).getTask();
+        assertTrue(((AddCommand) command).getAddedTask() instanceof DeadlineTask);
+        DeadlineTask task = (DeadlineTask) ((AddCommand) command).getAddedTask();
         assertEquals("Submit report", task.getDescription());
         assertEquals("2025-01-01T18:00", task.getDeadline().toString());
     }
@@ -86,7 +86,7 @@ class ParserTest {
         Parser parser = new Parser();
         Command command = parser.parseCommand("delete 3");
         assertTrue(command instanceof DeleteCommand);
-        assertEquals(2, ((DeleteCommand) command).getTaskIndex());
+        assertEquals(2, ((DeleteCommand) command).getDeleteIndex());
     }
 
     @Test
