@@ -1,10 +1,8 @@
 package commands;
 
-import exceptions.NiniException;
-
-import components.Ui;
-import components.TaskList;
 import components.Storage;
+import components.TaskList;
+import components.Ui;
 
 /**
  * Represents a command to display the list of tasks.

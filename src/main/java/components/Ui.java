@@ -1,10 +1,8 @@
 package components;
 
-import tasks.Task;
-
-import java.util.ArrayList;
 import java.util.List;
 
+import tasks.Task;
 
 /**
  * Handles user interface interactions by displaying messages to the user.
