@@ -1,68 +1,0 @@
-[1mdiff --git a/src/test/java/components/ParserTest.java b/src/test/java/components/ParserTest.java[m
-[1mindex b3f7647..cabd395 100755[m
-[1m--- a/src/test/java/components/ParserTest.java[m
-[1m+++ b/src/test/java/components/ParserTest.java[m
-[36m@@ -38,7 +38,7 @@[m [mclass ParserTest {[m
-         Parser parser = new Parser();[m
-         Command command = parser.parseCommand("unmark 2");[m
-         assertTrue(command instanceof UnmarkCommand);[m
-[31m-        assertEquals(1, ((UnmarkCommand) command).getTaskIndex());[m
-[32m+[m[32m        assertEquals(1, ((UnmarkCommand) command).getUnmarkIndex());[m[41m[m
-     }[m
- [m
-     @Test[m
-[36m@@ -46,8 +46,8 @@[m [mclass ParserTest {[m
-         Parser parser = new Parser();[m
-         Command command = parser.parseCommand("todo Buy groceries");[m
-         assertTrue(command instanceof AddCommand);[m
-[31m-        assertTrue(((AddCommand) command).getTask() instanceof ToDoTask);[m
-[31m-        assertEquals("Buy groceries", ((AddCommand) command).getTask().getDescription());[m
-[32m+[m[32m        assertTrue(((AddCommand) command).getAddedTask() instanceof ToDoTask);[m[41m[m
-[32m+[m[32m        assertEquals("Buy groceries", ((AddCommand) command).getAddedTask().getDescription());[m[41m[m
-     }[m
- [m
-     @Test[m
-[36m@@ -55,8 +55,8 @@[m [mclass ParserTest {[m
-         Parser parser = new Parser();[m
-         Command command = parser.parseCommand("event Meeting /from 1/1/2025 1000 /to 1/1/2025 1200");[m
-         assertTrue(command instanceof AddCommand);[m
-[31m-        assertTrue(((AddCommand) command).getTask() instanceof EventTask);[m
-[31m-        EventTask task = (EventTask) ((AddCommand) command).getTask();[m
-[32m+[m[32m        assertTrue(((AddCommand) command).getAddedTask() instanceof EventTask);[m[41m[m
-[32m+[m[32m        EventTask task = (EventTask) ((AddCommand) command).getAddedTask();[m[41m[m
-         assertEquals("Meeting", task.getDescription());[m
-         assertEquals("2025-01-01T10:00", task.getStartDateTime().toString());[m
-         assertEquals("2025-01-01T12:00", task.getEndDateTime().toString());[m
-[36m@@ -67,8 +67,8 @@[m [mclass ParserTest {[m
-         Parser parser = new Parser();[m
-         Command command = parser.parseCommand("deadline Submit report /by 1/1/2025 1800");[m
-         assertTrue(command instanceof AddCommand);[m
-[31m-        assertTrue(((AddCommand) command).getTask() instanceof DeadlineTask);[m
-[31m-        DeadlineTask task = (DeadlineTask) ((AddCommand) command).getTask();[m
-[32m+[m[32m        assertTrue(((AddCommand) command).getAddedTask() instanceof DeadlineTask);[m[41m[m
-[32m+[m[32m        DeadlineTask task = (DeadlineTask) ((AddCommand) command).getAddedTask();[m[41m[m
-         assertEquals("Submit report", task.getDescription());[m
-         assertEquals("2025-01-01T18:00", task.getDeadline().toString());[m
-     }[m
-[36m@@ -86,7 +86,7 @@[m [mclass ParserTest {[m
-         Parser parser = new Parser();[m
-         Command command = parser.parseCommand("delete 3");[m
-         assertTrue(command instanceof DeleteCommand);[m
-[31m-        assertEquals(2, ((DeleteCommand) command).getTaskIndex());[m
-[32m+[m[32m        assertEquals(2, ((DeleteCommand) command).getDeleteIndex());[m[41m[m
-     }[m
- [m
-     @Test[m
-[1mdiff --git a/src/test/java/tasks/EventTaskTest.java b/src/test/java/tasks/EventTaskTest.java[m
-[1mindex 10d6320..02ec858 100755[m
-[1m--- a/src/test/java/tasks/EventTaskTest.java[m
-[1m+++ b/src/test/java/tasks/EventTaskTest.java[m
-[36m@@ -60,7 +60,7 @@[m [mclass EventTaskTest {[m
-     void testToString() {[m
-         try {[m
-             EventTask task = new EventTask("Conference", "25/12/2025 0900", "25/12/2025 1700", false);[m
-[31m-            assertEquals("[E][ ] Conference ( from: Dec 25 2025, 9:00am to: Dec 25 2025, 5:00pm)", task.toString());[m
-[32m+[m[32m            assertEquals("[E][ ] Conference (from: Dec 25 2025, 9:00am to: Dec 25 2025, 5:00pm)", task.toString());[m[41m[m
-         } catch (NiniException e) {[m
-             fail("Exception should not have been thrown for valid input.");[m
-         }[m
