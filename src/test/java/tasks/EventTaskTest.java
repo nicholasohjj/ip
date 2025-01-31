@@ -1,12 +1,19 @@
 package tasks;
 
-import exceptions.InvalidFormatException;
-import exceptions.NiniException;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import exceptions.InvalidFormatException;
+import exceptions.NiniException;
+
+
 
 class EventTaskTest {
 

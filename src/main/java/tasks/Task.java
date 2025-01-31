@@ -31,7 +31,8 @@ public class Task {
      * Constructs a new {@code Task} with the given description and completion status.
      *
      * @param description The description of the task.
-     * @param isDone      The completion status of the task. {@code true} if the task is completed, {@code false} otherwise.
+     * @param isDone      The completion status of the task.
+     *                    {@code true} if the task is completed, {@code false} otherwise.
      */
     public Task(String description, boolean isDone) {
         this(description);

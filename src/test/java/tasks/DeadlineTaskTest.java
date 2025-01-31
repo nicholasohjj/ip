@@ -1,12 +1,17 @@
 package tasks;
 
-import exceptions.InvalidFormatException;
-import exceptions.NiniException;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import exceptions.InvalidFormatException;
+import exceptions.NiniException;
 
 public class DeadlineTaskTest {
 
@@ -15,7 +20,7 @@ public class DeadlineTaskTest {
         try {
             DeadlineTask task = new DeadlineTask("Submit report", "25/12/2025 1800");
             assertEquals("Submit report", task.getDescription());
-            assertEquals(LocalDateTime.of(2025,12,25,18,0), task.getDeadline());
+            assertEquals(LocalDateTime.of(2025, 12, 25, 18, 0), task.getDeadline());
             assertFalse(task.isDone());
         } catch (NiniException e) {
             fail("Exception should not have been thrown for valid input");

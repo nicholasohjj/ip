@@ -2,13 +2,11 @@ package commands;
 
 import java.io.IOException;
 
+import components.Storage;
+import components.TaskList;
+import components.Ui;
 import exceptions.InvalidTaskNumberException;
 import exceptions.NiniException;
-
-import components.Ui;
-import components.TaskList;
-import components.Storage;
-
 import tasks.Task;
 
 /**
@@ -38,10 +36,12 @@ public class DeleteCommand extends Command {
      * @param storage  The storage component responsible for saving tasks.
      * @throws NiniException If the task index is invalid or an error occurs while updating storage.
      */
+    @SuppressWarnings("checkstyle:LineLength")
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
         if (!taskList.isValidIndex(taskIndex)) {
-            throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and " + taskList.size() + ".");
+            throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
+                    + taskList.size() + ".");
         }
 
         try {
