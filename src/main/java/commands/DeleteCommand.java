@@ -15,15 +15,15 @@ import tasks.Task;
  */
 public class DeleteCommand extends Command {
 
-    private final int taskIndex;
+    private final int[] taskIndices;
 
     /**
      * Constructs a {@code DeleteCommand} with the specified task index.
      *
-     * @param taskIndex The index of the task to be deleted (zero-based).
+     * @param taskIndices The indices of the tasks to be deleted (zero-based).
      */
-    public DeleteCommand(int taskIndex) {
-        this.taskIndex = taskIndex;
+    public DeleteCommand(int... taskIndices) {
+        this.taskIndices = taskIndices;
     }
 
     /**
@@ -38,20 +38,23 @@ public class DeleteCommand extends Command {
      */
     @Override
     public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
-        if (!taskList.isValidIndex(taskIndex)) {
-            throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
-                    + taskList.size() + ".");
-        }
+        StringBuilder confirmationMessage = new StringBuilder();
 
-        String confirmationMessage;
-        try {
-            Task removedTask = taskList.removeTask(taskIndex);
-            confirmationMessage = ui.showTaskRemoved(removedTask, taskList.size());
-            storage.overwriteTasks(taskList.getTasks());
-        } catch (IOException e) {
-            return ui.showError("Error saving updated task list: " + e.getMessage());
+        for (int taskIndex : taskIndices) {
+            if (!taskList.isValidIndex(taskIndex)) {
+                throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
+                        + taskList.size() + ".");
+            }
+
+            try {
+                Task removedTask = taskList.removeTask(taskIndex);
+                confirmationMessage.append(ui.showTaskRemoved(removedTask, taskList.size())).append("\n");
+                storage.overwriteTasks(taskList.getTasks());
+            } catch (IOException e) {
+                return ui.showError("Error saving updated task list: " + e.getMessage());
+            }
         }
-        return confirmationMessage;
+        return confirmationMessage.toString();
     }
 
     /**
@@ -59,7 +62,7 @@ public class DeleteCommand extends Command {
      *
      * @return The zero-based index of the task.
      */
-    public int getDeleteIndex() {
-        return this.taskIndex;
+    public int[] getDeleteIndices() {
+        return this.taskIndices;
     }
 }

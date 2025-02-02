@@ -1,5 +1,6 @@
 package components;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,17 +41,17 @@ class ParserTest {
     @Test
     void testParseMarkCommand() throws NiniException {
         Parser parser = new Parser();
-        Command command = parser.parseCommand("mark 1");
+        Command command = parser.parseCommand("mark 1 3 5");
         assertTrue(command instanceof MarkCommand);
-        assertEquals(0, ((MarkCommand) command).getTaskIndex());
+        assertArrayEquals(new int[]{0, 2, 4}, ((MarkCommand) command).getMarkIndices());
     }
 
     @Test
     void testParseUnmarkCommand() throws NiniException {
         Parser parser = new Parser();
-        Command command = parser.parseCommand("unmark 2");
+        Command command = parser.parseCommand("unmark 2 4");
         assertTrue(command instanceof UnmarkCommand);
-        assertEquals(1, ((UnmarkCommand) command).getUnmarkIndex());
+        assertArrayEquals(new int[]{1, 3}, ((UnmarkCommand) command).getUnmarkIndices());
     }
 
     @Test
@@ -96,9 +97,9 @@ class ParserTest {
     @Test
     void testParseDeleteCommand() throws NiniException {
         Parser parser = new Parser();
-        Command command = parser.parseCommand("delete 3");
+        Command command = parser.parseCommand("delete 3 5 7");
         assertTrue(command instanceof DeleteCommand);
-        assertEquals(2, ((DeleteCommand) command).getDeleteIndex());
+        assertArrayEquals(new int[]{2, 4, 6}, ((DeleteCommand) command).getDeleteIndices());
     }
 
     @Test

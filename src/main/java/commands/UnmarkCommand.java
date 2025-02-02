@@ -14,16 +14,16 @@ import exceptions.NiniException;
  */
 public class UnmarkCommand extends Command {
 
-    private final int unmarkIndex;
+    private final int[] unmarkIndices;
 
 
     /**
      * Constructs an {@code UnmarkCommand} with the specified task index.
      *
-     * @param unmarkIndex The index of the task to be unmarked as not done (zero-based).
+     * @param unmarkIndices The indices of the tasks to be unmarked as not done (zero-based).
      */
-    public UnmarkCommand(int unmarkIndex) {
-        this.unmarkIndex = unmarkIndex;
+    public UnmarkCommand(int... unmarkIndices) {
+        this.unmarkIndices = unmarkIndices;
     }
 
     /**
@@ -38,24 +38,29 @@ public class UnmarkCommand extends Command {
      */
     @Override
     public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
-        if (!taskList.isValidIndex(unmarkIndex)) {
-            throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
-                    + taskList.size() + ".");
-        }
+        StringBuilder confirmationMessage = new StringBuilder();
 
-        String confirmationMessage;
+        for (int index : unmarkIndices) {
+            if (!taskList.isValidIndex(index)) {
+                throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
+                        + taskList.size() + ".");
+            }
 
-        try {
-            taskList.unmarkTask(unmarkIndex);
-            confirmationMessage = ui.formatMessage("OK, I've marked this task as not done yet:\n  "
-                    + taskList.getTask(unmarkIndex));
-            storage.overwriteTasks(taskList.getTasks());
-        } catch (IllegalStateException e) {
-            return ui.showError("Error: Task is already unmarked.");
-        } catch (IOException e) {
-            return ui.showError("Error saving updated task list: " + e.getMessage());
+            try {
+                taskList.unmarkTask(index);
+                confirmationMessage.append(ui.formatMessage("OK, I've marked this task as not done yet:\n  "
+                        + taskList.getTask(index))).append("\n");
+            } catch (IllegalStateException e) {
+                return ui.showError("Error: Task is already unmarked.");
+            }
+
+            try {
+                storage.overwriteTasks(taskList.getTasks());
+            } catch (IOException e) {
+                return ui.showError("Error saving updated task list: " + e.getMessage());
+            }
         }
-        return confirmationMessage;
+        return confirmationMessage.toString();
     }
 
     /**
@@ -63,7 +68,7 @@ public class UnmarkCommand extends Command {
      *
      * @return The one-based index of the task.
      */
-    public int getUnmarkIndex() {
-        return this.unmarkIndex;
+    public int[] getUnmarkIndices() {
+        return this.unmarkIndices;
     }
 }

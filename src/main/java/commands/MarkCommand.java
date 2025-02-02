@@ -14,15 +14,15 @@ import exceptions.NiniException;
  */
 public class MarkCommand extends Command {
 
-    private final int markIndex;
+    private final int[] markIndices;
 
     /**
      * Constructs a {@code MarkCommand} with the specified task index.
      *
-     * @param markIndex The index of the task to be marked as done (zero-based).
+     * @param markIndices The indices of the tasks to be marked as done (zero-based).
      */
-    public MarkCommand(int markIndex) {
-        this.markIndex = markIndex;
+    public MarkCommand(int... markIndices) {
+        this.markIndices = markIndices;
     }
 
     /**
@@ -38,31 +38,36 @@ public class MarkCommand extends Command {
      */
     @Override
     public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
-        if (!taskList.isValidIndex(markIndex)) {
-            throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
-                    + taskList.size() + ".");
-        }
+        StringBuilder confirmationMessage = new StringBuilder();
 
-        String confirmationMessage;
+        for (int index : markIndices) {
+            if (!taskList.isValidIndex(index)) {
+                throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
+                        + taskList.size() + ".");
+            }
+            try {
+                taskList.markTask(index);
+                confirmationMessage.append(ui.formatMessage("Nice! I've marked this task as done:\n  "
+                        + taskList.getTask(index))).append("\n");
+            } catch (IllegalStateException e) {
+                return ui.showError("Error: Task is already marked as done.");
+            }
+        }
         try {
-            taskList.markTask(markIndex);
-            confirmationMessage = ui.formatMessage("Nice! I've marked this task as done:\n  "
-                    + taskList.getTask(markIndex));
             storage.overwriteTasks(taskList.getTasks());
-        } catch (IllegalStateException e) {
-            return ui.showError("Error: Task is already marked as done.");
         } catch (IOException e) {
             return ui.showError("Error saving updated task list: " + e.getMessage());
         }
-        return confirmationMessage;
+        return confirmationMessage.toString();
     }
+
 
     /**
      * Returns the index of the task to be marked as done.
      *
      * @return The zero-based index of the task.
      */
-    public int getTaskIndex() {
-        return markIndex;
+    public int[] getMarkIndices() {
+        return markIndices;
     }
 }

@@ -42,9 +42,9 @@ public class Parser {
         case "bye":
             return new ExitCommand();
         case "mark":
-            return new MarkCommand(parseIndex(details));
+            return new MarkCommand(parseIndices(details));
         case "unmark":
-            return new UnmarkCommand(parseIndex(details));
+            return new UnmarkCommand(parseIndices(details));
         case "todo":
             validateArguments(details, "Description for todo cannot be empty");
             return new AddCommand(new ToDoTask(details));
@@ -55,7 +55,7 @@ public class Parser {
         case "sort":
             return new SortCommand();
         case "delete":
-            return new DeleteCommand(parseIndex(details));
+            return new DeleteCommand(parseIndices(details));
         case "find":
             return new FindCommand(details);
         default:
@@ -79,20 +79,27 @@ public class Parser {
     }
 
 
-    private int parseIndex(String input) throws InvalidFormatException {
+    private int[] parseIndices(String input) throws InvalidFormatException {
         try {
-            return Integer.parseInt(input) - 1;
+            String[] parts = input.split("\\s+"); // Split input by spaces
+            int[] indices = new int[parts.length];
+
+            for (int i = 0; i < parts.length; i++) {
+                indices[i] = Integer.parseInt(parts[i]) - 1; // Convert to zero-based index
+            }
+
+            return indices;
         } catch (NumberFormatException e) {
-            throw new InvalidFormatException("Invalid task index. Please enter a valid number.");
+            throw new InvalidFormatException("Invalid task indices. Please enter valid numbers separated by spaces.");
         }
     }
 
-    private void validateArguments(String input, String errorMessage) throws InvalidFormatException {
+
+    private void validateArguments(String input, String... errorMessages) throws InvalidFormatException {
         if (input.isEmpty()) {
-            throw new InvalidFormatException(errorMessage);
+            throw new InvalidFormatException(String.join(" ", errorMessages));
         }
     }
-
     private Command parseEvent(String details) throws NiniException {
         validateArguments(details, "Description cannot be empty for event");
         if (!details.contains("/from") || !details.contains("/to")) {
