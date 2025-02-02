@@ -27,37 +27,41 @@ public class UnmarkCommand extends Command {
     }
 
     /**
-     * Executes the unmark task command.
-     * Marks the specified task as not done, displays a confirmation message,
-     * and updates the storage.
+     * Executes the command to mark the specified task as not done.
+     * If the task index is invalid, an exception is thrown.
      *
      * @param taskList The task list containing the task.
      * @param ui       The user interface for displaying messages.
      * @param storage  The storage component responsible for saving tasks.
+     * @return A confirmation message indicating the task has been unmarked.
      * @throws NiniException If the task index is invalid or an error occurs while updating storage.
      */
     @Override
-    public void execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
+    public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
         if (!taskList.isValidIndex(unmarkIndex)) {
             throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
                     + taskList.size() + ".");
         }
 
+        String confirmationMessage;
+
         try {
             taskList.unmarkTask(unmarkIndex);
-            ui.printLineWithMessage("OK, I've marked this task as not done yet:\n  " + taskList.getTask(unmarkIndex));
+            confirmationMessage = ui.formatMessage("OK, I've marked this task as not done yet:\n  "
+                    + taskList.getTask(unmarkIndex));
             storage.overwriteTasks(taskList.getTasks());
         } catch (IllegalStateException e) {
-            ui.showError("Error: Task is already unmarked.");
+            return ui.showError("Error: Task is already unmarked.");
         } catch (IOException e) {
-            ui.showError("Error saving updated task list: " + e.getMessage());
+            return ui.showError("Error saving updated task list: " + e.getMessage());
         }
+        return confirmationMessage;
     }
 
     /**
-     * Returns the index of the task to be unmarked.
+     * Returns the one-based index of the task to be unmarked.
      *
-     * @return The zero-based index of the task.
+     * @return The one-based index of the task.
      */
     public int getUnmarkIndex() {
         return this.unmarkIndex;

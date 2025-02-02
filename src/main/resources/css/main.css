@@ -1,0 +1,104 @@
+/* Set background color and image */
+.root {
+    -fx-background-color: linear-gradient(to bottom right, #e3f2fd, #bbdefb);
+    -fx-background-image: url("../images/background.jpg");
+    -fx-background-size: cover;
+}
+
+/* Styling for the ScrollPane to remove background color */
+.scroll-pane {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-fit-to-width: true;
+    -fx-fit-to-height: true;
+}
+
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Customize the text field for user input */
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #64b5f6;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+    -fx-pref-width: 100%;
+}
+
+.text-field:focused {
+    -fx-border-color: #1976d2;
+}
+
+/* Styling for the send button */
+.button {
+    -fx-background-color: #64b5f6;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+.button:hover {
+    -fx-background-color: #42a5f5;
+}
+.button:pressed {
+    -fx-background-color: #1976d2;
+}
+
+/* Style for the chat bubbles */
+.label {
+    -fx-padding: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-wrap-text: true;
+    -fx-max-width: 300px;
+}
+
+/* User's messages */
+.user-dialog {
+    -fx-background-color: #bbdefb;
+    -fx-text-fill: black;
+    -fx-alignment: center-right;
+    -fx-border-color: #64b5f6;
+}
+
+/* Bot's messages */
+.bot-dialog {
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: black;
+    -fx-alignment: center-left;
+    -fx-border-color: #b0bec5;
+}
+
+/* Enhancements for command-specific styles */
+.add-label {
+    -fx-background-color: yellow;
+}
+
+.marked-label {
+    -fx-background-color: palegreen;
+}
+
+.delete-label {
+    -fx-background-color: lightpink;
+}
+
+/* Circular profile pictures */
+#displayPicture {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 5, 5);
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-rotate: 0;
+    -fx-background-radius: 50%;
+}
+
+/* Adding hover effects for smooth interaction */
+.button:hover {
+    -fx-background-color: cyan;
+    -fx-font-size: 18px;
+}
+.button:pressed {
+    -fx-background-color: orange;
+    -fx-font-size: 20px;
+}

@@ -36,21 +36,22 @@ public class DeleteCommand extends Command {
      * @param storage  The storage component responsible for saving tasks.
      * @throws NiniException If the task index is invalid or an error occurs while updating storage.
      */
-    @SuppressWarnings("checkstyle:LineLength")
     @Override
-    public void execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
+    public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
         if (!taskList.isValidIndex(taskIndex)) {
             throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
                     + taskList.size() + ".");
         }
 
+        String confirmationMessage;
         try {
             Task removedTask = taskList.removeTask(taskIndex);
-            ui.showTaskRemoved(removedTask, taskList.size());
+            confirmationMessage = ui.showTaskRemoved(removedTask, taskList.size());
             storage.overwriteTasks(taskList.getTasks());
         } catch (IOException e) {
-            ui.showError("Error saving updated task list: " + e.getMessage());
+            return ui.showError("Error saving updated task list: " + e.getMessage());
         }
+        return confirmationMessage;
     }
 
     /**

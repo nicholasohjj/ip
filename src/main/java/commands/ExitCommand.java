@@ -17,10 +17,11 @@ public class ExitCommand extends Command {
      * @param taskList The task list (not modified by this command).
      * @param ui       The user interface for displaying messages.
      * @param storage  The storage component (not used by this command).
+     * @return         The goodbye message
      */
     @Override
-    public void execute(TaskList taskList, Ui ui, Storage storage) {
-        ui.showGoodbye();
+    public String execute(TaskList taskList, Ui ui, Storage storage) {
+        return ui.showGoodbye();
     }
 
     /**

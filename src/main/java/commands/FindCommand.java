@@ -1,6 +1,5 @@
 package commands;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,20 +34,19 @@ public class FindCommand extends Command {
      * @param taskList The list of tasks to search within.
      * @param ui       The user interface component to display messages.
      * @param storage  The storage component (not used in this command).
+     * @return         A list of tasks matching the keyword
      * @throws NiniException If an error occurs during execution.
      */
     @Override
-    public void execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
+    public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
         List<Task> matchingTasks = taskList.getTasks().stream()
                 .filter(task -> task.getDescription().toLowerCase().contains(keyword.toLowerCase()))
                 .collect(Collectors.toList());
 
         if (matchingTasks.isEmpty()) {
-            ui.printLineWithMessage("No matching tasks found");
+            return ui.formatMessage("No matching tasks found");
         } else {
-            ui.showTaskList((ArrayList<Task>) matchingTasks);
+            return ui.showTaskList(matchingTasks);
         }
-
-
     }
 }

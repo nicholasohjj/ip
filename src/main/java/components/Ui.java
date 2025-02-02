@@ -15,15 +15,15 @@ public class Ui {
     /**
      * Displays a greeting message when the program starts.
      */
-    public void showGreeting() {
-        printLineWithMessage(" Hello! I'm NiniNana\n What can I do for you?");
+    public String showGreeting() {
+        return formatMessage(" Hello! I'm NiniNana\n What can I do for you?");
     }
 
     /**
      * Displays a goodbye message when the program exits.
      */
-    public void showGoodbye() {
-        printLineWithMessage("Bye. Hope to see you again soon!");
+    public String showGoodbye() {
+        return formatMessage("Bye. Hope to see you again soon!");
     }
 
     /**
@@ -31,8 +31,8 @@ public class Ui {
      *
      * @param errorMessage The error message to be displayed.
      */
-    public void showError(String errorMessage) {
-        printLineWithMessage(errorMessage);
+    public String showError(String errorMessage) {
+        return formatMessage(errorMessage);
     }
 
     /**
@@ -40,17 +40,16 @@ public class Ui {
      *
      * @param tasks The list of tasks to be displayed.
      */
-    public void showTaskList(List<Task> tasks) {
-        printLine();
+    public String showTaskList(List<Task> tasks) {
         if (tasks.isEmpty()) {
-            System.out.println("The list is empty.");
+            return formatMessage("The list is empty.");
         } else {
-            System.out.println("Here are the tasks in your list:");
+            StringBuilder listMessage = new StringBuilder("Here are the tasks in your list:\n");
             for (int i = 0; i < tasks.size(); i++) {
-                System.out.printf("%d. %s%n", i + 1, tasks.get(i));
+                listMessage.append(String.format("%d. %s%n", i + 1, tasks.get(i)));
             }
+            return listMessage.toString();
         }
-        printLine();
     }
 
     /**
@@ -58,9 +57,10 @@ public class Ui {
      *
      * @param task The task that was added.
      * @param size The total number of tasks after the addition.
+     * @return
      */
-    public void showTaskAdded(Task task, int size) {
-        printLineWithMessage(String.format(
+    public String showTaskAdded(Task task, int size) {
+        return formatMessage(String.format(
                 "Got it. I've added this task:\n  %s\nNow you have %d tasks in the list.",
                 task, size));
     }
@@ -71,28 +71,20 @@ public class Ui {
      * @param task The task that was removed.
      * @param size The total number of tasks after the removal.
      */
-    public void showTaskRemoved(Task task, int size) {
-        printLineWithMessage(String.format(
+    public String showTaskRemoved(Task task, int size) {
+        return formatMessage(String.format(
                 "Noted. I've removed this task:\n  %s\nNow you have %d tasks in the list.",
                 task, size));
     }
 
     /**
-     * Prints a horizontal line to separate sections in the output.
-     */
-    public void printLine() {
-        System.out.println(LINE);
-    }
-
-    /**
-     * Prints a horizontal line along with a specified message.
+     * Formats a message with horizontal lines for consistency.
      *
-     * @param message The message to be displayed between the lines.
+     * @param message The message to format.
+     * @return The formatted message.
      */
-    public void printLineWithMessage(String message) {
-        printLine();
-        System.out.println(message);
-        printLine();
+    public String formatMessage(String message) {
+        return String.format("%s%n%s%n%s", LINE, message, LINE);
     }
 
 }
