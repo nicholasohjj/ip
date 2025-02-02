@@ -33,24 +33,28 @@ public class MarkCommand extends Command {
      * @param taskList The task list containing the task.
      * @param ui       The user interface for displaying messages.
      * @param storage  The storage component responsible for saving tasks.
+     * @return A confirmation message indicating the task has been marked as done.
      * @throws NiniException If the task index is invalid or an error occurs while updating storage.
      */
     @Override
-    public void execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
+    public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
         if (!taskList.isValidIndex(markIndex)) {
             throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
                     + taskList.size() + ".");
         }
 
+        String confirmationMessage;
         try {
             taskList.markTask(markIndex);
-            ui.printLineWithMessage("Nice! I've marked this task as done:\n  " + taskList.getTask(markIndex));
+            confirmationMessage = ui.formatMessage("Nice! I've marked this task as done:\n  "
+                    + taskList.getTask(markIndex));
             storage.overwriteTasks(taskList.getTasks());
         } catch (IllegalStateException e) {
-            ui.showError("Error: Task is already marked as done.");
+            return ui.showError("Error: Task is already marked as done.");
         } catch (IOException e) {
-            ui.showError("Error saving updated task list: " + e.getMessage());
+            return ui.showError("Error saving updated task list: " + e.getMessage());
         }
+        return confirmationMessage;
     }
 
     /**

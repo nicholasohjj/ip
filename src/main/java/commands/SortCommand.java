@@ -3,7 +3,6 @@ package commands;
 import components.Storage;
 import components.TaskList;
 import components.Ui;
-import exceptions.NiniException;
 
 /**
  * Represents a command to sort tasks by their deadlines or event start times.
@@ -12,18 +11,17 @@ import exceptions.NiniException;
 public class SortCommand extends Command {
 
     /**
-     * Executes the sort command.
-     * Sorts the tasks in the task list based on their deadlines or event start times
-     * and displays a confirmation message to the user.
+     * Executes the command to mark the specified task as not done.
+     * If the task index is invalid, an exception is thrown.
      *
-     * @param taskList The task list containing tasks to be sorted.
+     * @param taskList The task list containing the task.
      * @param ui       The user interface for displaying messages.
-     * @param storage  The storage component (not used in this command).
-     * @throws NiniException Not thrown in this implementation.
+     * @param storage  The storage component responsible for saving tasks.
+     * @return A confirmation message indicating the task has been unmarked.
      */
     @Override
-    public void execute(TaskList taskList, Ui ui, Storage storage) {
+    public String execute(TaskList taskList, Ui ui, Storage storage) {
         taskList.sortTasks();
-        ui.printLineWithMessage("Tasks sorted by date!");
+        return ui.formatMessage("Tasks sorted by date!");
     }
 }

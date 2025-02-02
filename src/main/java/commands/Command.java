@@ -19,7 +19,7 @@ public abstract class Command {
      * @param storage  The storage component that handles saving and loading tasks.
      * @throws NiniException If an error occurs during execution.
      */
-    public abstract void execute(TaskList taskList, Ui ui, Storage storage) throws NiniException;
+    public abstract String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException;
 
     /**
      * Determines whether the command should cause the program to exit.
