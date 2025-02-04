@@ -3,9 +3,8 @@ package components;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import tasks.DeadlineTask;
-import tasks.EventTask;
 import tasks.Task;
 
 /**
@@ -130,8 +129,8 @@ public class TaskList {
      */
     public void sortTasks() {
         tasks.sort((task1, task2) -> {
-            LocalDateTime date1 = getTaskDate(task1);
-            LocalDateTime date2 = getTaskDate(task2);
+            LocalDateTime date1 = task1.getRelevantDate();
+            LocalDateTime date2 = task2.getRelevantDate();
 
             if (date1 == null && date2 == null) {
                 return 0;
@@ -146,12 +145,16 @@ public class TaskList {
         });
     }
 
-    private LocalDateTime getTaskDate(Task task) {
-        if (task instanceof DeadlineTask) {
-            return ((DeadlineTask) task).getDeadline();
-        } else if (task instanceof EventTask) {
-            return ((EventTask) task).getStartDateTime();
-        }
-        return null;
+    /**
+     * Finds and returns a list of tasks whose descriptions contain the specified keyword.
+     * The search is case-insensitive.
+     *
+     * @param keyword The keyword to search for in task descriptions.
+     * @return A list of tasks whose descriptions contain the specified keyword.
+     */
+    public List<Task> findTasks(String keyword) {
+        return this.tasks.stream()
+                .filter(task -> task.getDescription().toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList());
     }
 }

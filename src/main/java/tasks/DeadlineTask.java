@@ -103,4 +103,9 @@ public class DeadlineTask extends Task {
         );
     }
 
+    @Override
+    public LocalDateTime getRelevantDate() {
+        return deadline;
+    }
+
 }

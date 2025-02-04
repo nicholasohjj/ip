@@ -1,7 +1,6 @@
 package commands;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import components.Storage;
 import components.TaskList;
@@ -39,9 +38,7 @@ public class FindCommand extends Command {
      */
     @Override
     public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
-        List<Task> matchingTasks = taskList.getTasks().stream()
-                .filter(task -> task.getDescription().toLowerCase().contains(keyword.toLowerCase()))
-                .collect(Collectors.toList());
+        List<Task> matchingTasks = taskList.findTasks(keyword);
 
         if (matchingTasks.isEmpty()) {
             return ui.formatMessage("No matching tasks found");

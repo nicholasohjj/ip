@@ -135,4 +135,9 @@ public class EventTask extends Task {
                 to.format(OUTPUT_FORMATTER)
         );
     }
+
+    @Override
+    public LocalDateTime getRelevantDate() {
+        return from;
+    }
 }

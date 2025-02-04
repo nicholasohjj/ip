@@ -1,5 +1,7 @@
 package tasks;
 
+import java.time.LocalDateTime;
+
 import exceptions.InvalidDataException;
 import exceptions.NiniException;
 
@@ -154,5 +156,9 @@ public class Task {
     @Override
     public String toString() {
         return String.format("[%s] %s", isDone ? "X" : " ", description);
+    }
+
+    public LocalDateTime getRelevantDate() {
+        return null;
     }
 }
