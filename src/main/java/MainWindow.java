@@ -51,7 +51,6 @@ public class MainWindow extends AnchorPane {
         assert dialogContainer != null : "DialogContainer should be properly initialized";
         assert userInput != null : "UserInput should be properly initialized";
         assert sendButton != null : "SendButton should be properly initialized";
-
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
         dialogContainer.prefWidthProperty().bind(scrollPane.widthProperty());
 
