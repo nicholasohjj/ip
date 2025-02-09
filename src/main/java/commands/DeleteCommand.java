@@ -1,6 +1,7 @@
 package commands;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import components.Storage;
 import components.TaskList;
@@ -14,6 +15,13 @@ import tasks.Task;
  * This command removes a task from the list, updates storage, and notifies the user.
  */
 public class DeleteCommand extends Command {
+
+    private static final String ASSERT_TASKLIST_NULL = "Task list cannot be null";
+    private static final String ASSERT_UI_NULL = "UI cannot be null";
+    private static final String ASSERT_STORAGE_NULL = "Storage cannot be null";
+    private static final String ASSERT_TASKINDEX_NEGATIVE = "Task index must be non-negative";
+    private static final String ERROR_INVALID_TASK_NUMBER = "Invalid task number. Please enter a number between 1 and ";
+    private static final String ERROR_STORAGE_UPDATE = "Error saving updated task list: ";
 
     private final int[] taskIndices;
 
@@ -39,32 +47,61 @@ public class DeleteCommand extends Command {
      */
     @Override
     public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
-        assert taskList != null : "Task list cannot be null";
-        assert ui != null : "UI cannot be null";
-        assert storage != null : "Storage cannot be null";
+        assert taskList != null : ASSERT_TASKLIST_NULL;
+        assert ui != null : ASSERT_UI_NULL;
+        assert storage != null : ASSERT_STORAGE_NULL;
 
+        int initialSize = taskList.size();
         StringBuilder confirmationMessage = new StringBuilder();
 
-        for (int taskIndex : taskIndices) {
-            assert taskIndex >= 0 : "Task index must be non-negative";
+        int[] sortedIndices = Arrays.stream(taskIndices)
+                .distinct()
+                .sorted()
+                .toArray();
 
-            if (!taskList.isValidIndex(taskIndex)) {
-                throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
-                        + taskList.size() + ".");
-            }
+        for (int taskIndex : sortedIndices) {
+            assert taskIndex >= 0 : ASSERT_TASKINDEX_NEGATIVE;
+            validateIndex(taskList, taskIndex);
 
-            try {
-                int initialSize = taskList.size();
-                Task removedTask = taskList.removeTask(taskIndex);
-                assert taskList.size() == initialSize - 1 : "Task list size should decrease by 1";
-
-                confirmationMessage.append(ui.showTaskRemoved(removedTask, taskList.size())).append("\n");
-                storage.overwriteTasks(taskList.getTasks());
-            } catch (IOException e) {
-                return "Error saving updated task list: " + e.getMessage();
-            }
+            Task removedTask = taskList.removeTask(taskIndex);
+            confirmationMessage.append(ui.showTaskRemoved(removedTask, taskList.size())).append("\n");
         }
-        return confirmationMessage.toString();
+
+        updateStorage(storage, taskList, confirmationMessage, initialSize);
+        return confirmationMessage.toString().trim();
+    }
+
+    /**
+     * Validates if the task index is within the valid range.
+     *
+     * @param taskList The task list.
+     * @param taskIndex The task index to validate.
+     * @throws InvalidTaskNumberException If the index is out of bounds.
+     */
+    private void validateIndex(TaskList taskList, int taskIndex) throws InvalidTaskNumberException {
+        try {
+            taskList.getTask(taskIndex); // Triggers TaskList's validateIndex()
+        } catch (IndexOutOfBoundsException e) {
+            throw new InvalidTaskNumberException(ERROR_INVALID_TASK_NUMBER + taskList.size() + ".");
+        }
+    }
+
+    /**
+     * Updates storage after tasks are deleted.
+     *
+     * @param storage The storage component.
+     * @param taskList The updated task list.
+     * @param confirmationMessage The confirmation message builder.
+     * @param initialSize The initial size of the task list.
+     */
+    private void updateStorage(Storage storage, TaskList taskList, StringBuilder confirmationMessage, int initialSize) {
+        try {
+            if (taskList.size() < initialSize) {
+                storage.overwriteTasks(taskList.getTasks());
+            }
+        } catch (IOException e) {
+            confirmationMessage.append("\n").append(ERROR_STORAGE_UPDATE).append(e.getMessage());
+        }
     }
 
     /**

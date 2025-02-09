@@ -13,6 +13,13 @@ import tasks.Task;
  */
 public class AddCommand extends Command {
 
+    private static final String ERROR_STORAGE = "Error saving task to storage: ";
+    private static final String ASSERT_TASK_NULL = "Task cannot be null";
+    private static final String ASSERT_TASKLIST_NULL = "Task list cannot be null";
+    private static final String ASSERT_UI_NULL = "UI cannot be null";
+    private static final String ASSERT_STORAGE_NULL = "Storage cannot be null";
+    private static final String ASSERT_TASKLIST_SIZE = "Task list size should increase by 1";
+
     private final Task task;
 
     /**
@@ -21,7 +28,7 @@ public class AddCommand extends Command {
      * @param task The task to be added.
      */
     public AddCommand(Task task) {
-        assert task != null : "task can't be null";
+        assert task != null : ASSERT_TASK_NULL;
         this.task = task;
     }
 
@@ -37,21 +44,32 @@ public class AddCommand extends Command {
      */
     @Override
     public String execute(TaskList taskList, Ui ui, Storage storage) {
-        assert taskList != null : "Task list cannot be null";
-        assert ui != null : "UI cannot be null";
-        assert storage != null : "Storage cannot be null";
+        assert taskList != null : ASSERT_TASKLIST_NULL;
+        assert ui != null : ASSERT_UI_NULL;
+        assert storage != null : ASSERT_STORAGE_NULL;
 
         int initialSize = taskList.size();
         taskList.addTask(task);
-        assert taskList.size() == initialSize + 1 : "Task list size should increase by 1";
+        assert taskList.size() == initialSize + 1 : ASSERT_TASKLIST_SIZE;
 
         String confirmationMessage = ui.showTaskAdded(task, taskList.size());
+        return saveTaskToStorage(storage, confirmationMessage);
+    }
+
+    /**
+     * Saves the task to storage and returns an appropriate message.
+     *
+     * @param storage             The storage component responsible for saving tasks.
+     * @param confirmationMessage The confirmation message to return on success.
+     * @return The confirmation message if successful, or an error message if saving fails.
+     */
+    private String saveTaskToStorage(Storage storage, String confirmationMessage) {
         try {
             storage.saveTask(task);
+            return confirmationMessage;
         } catch (IOException e) {
-            return e.getMessage();
+            return ERROR_STORAGE + e.getMessage();
         }
-        return confirmationMessage;
     }
 
     /**

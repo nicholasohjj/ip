@@ -14,6 +14,12 @@ import tasks.Task;
  */
 public class FindCommand extends Command {
 
+    private static final String ASSERT_KEYWORD_NULL = "Keyword cannot be null or empty";
+    private static final String ASSERT_TASKLIST_NULL = "Task list cannot be null";
+    private static final String ASSERT_UI_NULL = "UI cannot be null";
+    private static final String ASSERT_MATCHING_TASKS_NULL = "Matching tasks list should not be null";
+    private static final String NO_MATCH_MESSAGE = "No matching tasks found.";
+
     private final String keyword;
 
     /**
@@ -22,7 +28,7 @@ public class FindCommand extends Command {
      * @param keyword The keyword to search for in task descriptions.
      */
     public FindCommand(String keyword) {
-        assert keyword != null && !keyword.isBlank() : "Keyword cannot be null or empty";
+        assert keyword != null && !keyword.isBlank() : ASSERT_KEYWORD_NULL;
         this.keyword = keyword;
     }
 
@@ -39,16 +45,27 @@ public class FindCommand extends Command {
      */
     @Override
     public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
-        assert taskList != null : "Task list cannot be null";
-        assert ui != null : "UI cannot be null";
+        assert taskList != null : ASSERT_TASKLIST_NULL;
+        assert ui != null : ASSERT_UI_NULL;
 
-        List<Task> matchingTasks = taskList.findTasks(keyword);
-        assert matchingTasks != null : "Matching tasks list should not be null";
+        List<Task> matchingTasks = searchTasks(taskList);
 
         if (matchingTasks.isEmpty()) {
             return "No matching tasks found";
         } else {
             return ui.showTaskList(matchingTasks);
         }
+    }
+
+    /**
+     * Searches for tasks in the task list that contain the keyword.
+     *
+     * @param taskList The task list to search within.
+     * @return A list of tasks that contain the keyword in their description.
+     */
+    private List<Task> searchTasks(TaskList taskList) {
+        List<Task> matchingTasks = taskList.findTasks(keyword);
+        assert matchingTasks != null : ASSERT_MATCHING_TASKS_NULL;
+        return matchingTasks;
     }
 }

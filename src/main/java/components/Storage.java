@@ -19,6 +19,7 @@ import tasks.Task;
  */
 public class Storage {
     private static final String DEFAULT_FILE_PATH = "./data/chat.txt";
+    private static final String DATA_DIRECTORY = "./data";
 
     private final String fileName;
 
@@ -26,7 +27,7 @@ public class Storage {
      * Constructs a {@code Storage} object with the default file path {@code ./data/chat.txt}.
      */
     public Storage() {
-        fileName = DEFAULT_FILE_PATH;
+        this(DEFAULT_FILE_PATH);
     }
 
     /**
@@ -59,20 +60,18 @@ public class Storage {
      * @return An {@code ArrayList} of tasks loaded from the file.
      */
     public List<Task> loadTasks() throws IOException, NiniException {
-        List<Task> tasks = new ArrayList<>();
         File file = new File(fileName);
 
         if (!file.exists()) {
-            return tasks;
+            return new ArrayList<>();
         }
 
+        List<Task> tasks = new ArrayList<>();
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 assert line != null : "Read line should not be null";
-
-                Task task = Task.deserialize(line);
-                tasks.add(task);
+                tasks.add(Task.deserialize(line));
             }
         }
         return tasks;
@@ -82,14 +81,11 @@ public class Storage {
      * Saves a single task to the storage file by appending it to the existing file.
      *
      * @param task The task to be saved.
-     * @throws NiniException If an error occurs while writing to the file.
+     * @throws IOException If an error occurs while writing to the file.
      */
     public void saveTask(Task task) throws IOException {
         assert task != null : "Task cannot be null";
-        ensureFileDirectoryExists();
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
-            writer.write(task.serialize() + System.lineSeparator());
-        }
+        appendToFile(task.serialize());
     }
 
     /**
@@ -97,10 +93,33 @@ public class Storage {
      * This method removes all previous data in the file and writes the new tasks.
      *
      * @param tasks The list of tasks to be saved.
-     * @throws NiniException If an error occurs while writing to the file.
+     * @throws IOException If an error occurs while writing to the file.
      */
     public void overwriteTasks(List<Task> tasks) throws IOException {
         assert tasks != null : "Tasks list cannot be null";
+        writeToFile(tasks);
+    }
+
+    /**
+     * Appends a single serialized task to the storage file.
+     *
+     * @param taskData The serialized task string.
+     * @throws IOException If an error occurs while writing to the file.
+     */
+    private void appendToFile(String taskData) throws IOException {
+        ensureFileDirectoryExists();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
+            writer.write(taskData + System.lineSeparator());
+        }
+    }
+
+    /**
+     * Writes a list of serialized tasks to the storage file, overwriting existing content.
+     *
+     * @param tasks The list of tasks to be written.
+     * @throws IOException If an error occurs while writing to the file.
+     */
+    private void writeToFile(List<Task> tasks) throws IOException {
         ensureFileDirectoryExists();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for (Task task : tasks) {

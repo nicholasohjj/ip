@@ -1,6 +1,7 @@
 package components;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import tasks.Task;
 
@@ -10,27 +11,23 @@ import tasks.Task;
  */
 public class Ui {
 
+    private static final String GREETING_MESSAGE = "Hello! I'm NiniNana\nWhat can I do for you?";
+    private static final String GOODBYE_MESSAGE = "Bye. Hope to see you again soon!";
+    private static final String EMPTY_LIST_MESSAGE = "The list is empty.";
+    private static final String TASK_LIST_HEADER = "Here are the tasks in your list:";
+
     /**
      * Displays a greeting message when the program starts.
      */
     public String showGreeting() {
-        return "Hello! I'm NiniNana\n What can I do for you?";
+        return GREETING_MESSAGE;
     }
 
     /**
      * Displays a goodbye message when the program exits.
      */
     public String showGoodbye() {
-        return "Bye. Hope to see you again soon!";
-    }
-
-    /**
-     * Displays an error message.
-     *
-     * @param errorMessage The error message to be displayed.
-     */
-    public String showError(String errorMessage) {
-        return errorMessage;
+        return GOODBYE_MESSAGE;
     }
 
     /**
@@ -40,14 +37,12 @@ public class Ui {
      */
     public String showTaskList(List<Task> tasks) {
         if (tasks.isEmpty()) {
-            return "The list is empty.";
-        } else {
-            StringBuilder listMessage = new StringBuilder("Here are the tasks in your list:\n");
-            for (int i = 0; i < tasks.size(); i++) {
-                listMessage.append(String.format("%d. %s%n", i + 1, tasks.get(i)));
-            }
-            return listMessage.toString();
+            return EMPTY_LIST_MESSAGE;
         }
+
+        return IntStream.range(0, tasks.size())
+                .mapToObj(i -> String.format("%d. %s", i + 1, tasks.get(i)))
+                .reduce(TASK_LIST_HEADER, (list, task) -> list + "\n" + task);
     }
 
     /**

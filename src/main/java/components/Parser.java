@@ -24,6 +24,12 @@ import tasks.ToDoTask;
  */
 public class Parser {
 
+    private static final String ERROR_INVALID_DEADLINE_FORMAT = "Invalid format for deadline."
+            + " Use: deadline <description> /by <time>";
+    private static final String ERROR_INVALID_EVENT_FORMAT = "Invalid format for event."
+            + " Use: event <description> /from <start> /to <end>";
+    private static final String ERROR_EMPTY_DESCRIPTION = "Description cannot be empty";
+
     /**
      * Parses the user input and returns the appropriate {@code Command} object.
      *
@@ -48,8 +54,7 @@ public class Parser {
         case "unmark":
             return new UnmarkCommand(parseIndices(details));
         case "todo":
-            validateArguments(details, "Description for todo cannot be empty");
-            return new AddCommand(new ToDoTask(details));
+            return parseTodo(details);
         case "event":
             return parseEvent(details);
         case "deadline":
@@ -65,21 +70,37 @@ public class Parser {
         }
     }
 
-    private Command parseDeadline(String details) throws NiniException {
-        validateArguments(details, "Description cannot be empty for deadline");
-        if (!details.contains("/by")) {
-            throw new InvalidFormatException("Invalid format for deadline. Use: deadline <description> /by <time>");
-        }
+    private Command parseTodo(String details) throws NiniException {
+        validateNonEmpty(details, "Description for todo cannot be empty");
+        return new AddCommand(new ToDoTask(details));
+    }
 
-        String[] deadlineParts = details.split("/by", 2);
-        if (deadlineParts.length < 2) {
-            throw new InvalidFormatException("Invalid format for deadline. Use: deadline <description> /by <time>");
+    private Command parseDeadline(String details) throws NiniException {
+        validateNonEmpty(details, ERROR_EMPTY_DESCRIPTION);
+        String[] deadlineParts = splitDetails(details, "/by", ERROR_INVALID_DEADLINE_FORMAT);
+
+        if (deadlineParts.length < 2 || deadlineParts[1].trim().isEmpty()) {
+            throw new InvalidFormatException(ERROR_INVALID_DEADLINE_FORMAT);
         }
-        validateArguments(deadlineParts[0].trim(), "Description cannot be empty");
 
         return new AddCommand(new DeadlineTask(deadlineParts[0].trim(), deadlineParts[1].trim()));
     }
 
+    private Command parseEvent(String details) throws NiniException {
+        validateNonEmpty(details, ERROR_EMPTY_DESCRIPTION);
+
+        if (!details.contains("/from") || !details.contains("/to")) {
+            throw new InvalidFormatException(ERROR_INVALID_EVENT_FORMAT);
+        }
+
+        String[] eventParts = details.split("/from|/to", -1);
+        if (eventParts.length < 3 || eventParts[0].trim().isEmpty()
+                || eventParts[1].trim().isEmpty() || eventParts[2].trim().isEmpty()) {
+            throw new InvalidFormatException(ERROR_INVALID_EVENT_FORMAT);
+        }
+
+        return new AddCommand(new EventTask(eventParts[0].trim(), eventParts[1].trim(), eventParts[2].trim()));
+    }
 
     private int[] parseIndices(String input) throws InvalidFormatException {
         assert input != null && !input.isBlank() : "Task indices input cannot be null or empty";
@@ -98,29 +119,18 @@ public class Parser {
         }
     }
 
-
-    private void validateArguments(String input, String... errorMessages) throws InvalidFormatException {
-        assert errorMessages.length > 0 : "Error message cannot be empty";
-
+    private void validateNonEmpty(String input, String errorMessage) throws InvalidFormatException {
         if (input.isEmpty()) {
-            throw new InvalidFormatException(String.join(" ", errorMessages));
+            throw new InvalidFormatException(errorMessage);
         }
     }
-    private Command parseEvent(String details) throws NiniException {
-        validateArguments(details, "Description cannot be empty for event");
-        if (!details.contains("/from") || !details.contains("/to")) {
-            throw new InvalidFormatException("Invalid format for event."
-                    + " Use: event <description> /from <start> /to <end>");
-        }
 
-        String[] eventParts = details.split("/from|/to", 3);
-        if (eventParts.length < 3) {
-            throw new InvalidFormatException("Invalid format for event."
-                    + "Use: event <description> /from <start> /to <end>");
+    private String[] splitDetails(String details, String delimiter, String errorMessage) throws InvalidFormatException {
+        String[] parts = details.split(delimiter, -1);
+        if (parts.length < 2 || parts[0].trim().isEmpty()) {
+            throw new InvalidFormatException(errorMessage);
         }
-        validateArguments(eventParts[0].trim(), "Description cannot be empty");
-
-        return new AddCommand(new EventTask(eventParts[0].trim(), eventParts[1].trim(), eventParts[2].trim()));
+        return parts;
     }
 
 
