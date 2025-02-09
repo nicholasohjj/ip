@@ -15,8 +15,10 @@ import exceptions.NiniException;
  */
 public class EventTask extends Task {
 
-    private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm", Locale.ENGLISH);
-    private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma", Locale.ENGLISH);
+    private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm",
+            Locale.ENGLISH);
+    private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma",
+            Locale.ENGLISH);
     private final LocalDateTime from;
     private final LocalDateTime to;
 
