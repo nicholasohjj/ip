@@ -22,6 +22,7 @@ public class MarkCommand extends Command {
      * @param markIndices The indices of the tasks to be marked as done (zero-based).
      */
     public MarkCommand(int... markIndices) {
+        assert markIndices != null && markIndices.length > 0 : "Mark indices cannot be null or empty";
         this.markIndices = markIndices;
     }
 
@@ -38,25 +39,31 @@ public class MarkCommand extends Command {
      */
     @Override
     public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
+        assert taskList != null : "Task list cannot be null";
+        assert ui != null : "UI cannot be null";
+        assert storage != null : "Storage cannot be null";
+
         StringBuilder confirmationMessage = new StringBuilder();
 
         for (int index : markIndices) {
+            assert index >= 0 : "Task index must be non-negative";
+
             if (!taskList.isValidIndex(index)) {
                 throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
                         + taskList.size() + ".");
             }
             try {
                 taskList.markTask(index);
-                confirmationMessage.append(ui.formatMessage("Nice! I've marked this task as done:\n  "
-                        + taskList.getTask(index))).append("\n");
+                confirmationMessage.append("Nice! I've marked this task as done:\n  ")
+                        .append(taskList.getTask(index)).append("\n");
             } catch (IllegalStateException e) {
-                return ui.showError("Error: Task is already marked as done.");
+                return "Error: Task is already marked as done.";
             }
         }
         try {
             storage.overwriteTasks(taskList.getTasks());
         } catch (IOException e) {
-            return ui.showError("Error saving updated task list: " + e.getMessage());
+            return "Error saving updated task list: " + e.getMessage();
         }
         return confirmationMessage.toString();
     }

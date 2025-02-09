@@ -10,7 +10,7 @@ import exceptions.NiniException;
  * This class serves as a base class for different types of tasks such as
  * ToDoTask, DeadlineTask, and EventTask.
  */
-public class Task {
+public abstract class Task {
 
     private static final int TYPE_INDEX = 0;
     private static final int DONE_INDEX = 1;
@@ -25,6 +25,7 @@ public class Task {
      * @param description The description of the task.
      */
     public Task(String description) {
+        assert description != null && !description.isBlank() : "Task description must not be null or empty.";
         this.description = description;
         isDone = false;
     }
@@ -47,6 +48,7 @@ public class Task {
      * @return The task description.
      */
     public String getDescription() {
+        assert description != null : "Task description should not be null.";
         return description;
     }
 
@@ -92,9 +94,7 @@ public class Task {
      *
      * @return A serialized string representation of the task.
      */
-    public String serialize() {
-        return "";
-    }
+    public abstract String serialize();
 
     /**
      * Deserializes a given string into a {@code Task} object.
@@ -122,6 +122,9 @@ public class Task {
         boolean isDone = parts[DONE_INDEX].trim().equals("1");
         String description = parts[DESCRIPTION_INDEX].trim();
 
+        assert !type.isBlank() : "Task type should not be null or empty.";
+        assert !description.isBlank() : "Task description should not be null or empty.";
+
         switch (type) {
         case "T":
             return new ToDoTask(description, isDone);
@@ -130,6 +133,7 @@ public class Task {
                 throw new InvalidDataException("Missing deadline information.");
             }
             String deadlineStr = parts[3].trim();
+            assert !deadlineStr.isBlank() : "Deadline should not be null or empty.";
             return new DeadlineTask(description, deadlineStr, isDone);
         case "E":
             if (parts.length < 5) {
@@ -137,6 +141,8 @@ public class Task {
             }
             String fromStr = parts[3].trim();
             String toStr = parts[4].trim();
+            assert !fromStr.isBlank() : "Event start time should not be null or empty.";
+            assert !toStr.isBlank() : "Event end time should not be null or empty.";
             return new EventTask(description, fromStr, toStr, isDone);
         default:
             throw new InvalidDataException("Unknown task type.");
@@ -155,10 +161,9 @@ public class Task {
      */
     @Override
     public String toString() {
+        assert description != null : "Task description should not be null when calling toString.";
         return String.format("[%s] %s", isDone ? "X" : " ", description);
     }
 
-    public LocalDateTime getRelevantDate() {
-        return null;
-    }
+    public abstract LocalDateTime getRelevantDate();
 }

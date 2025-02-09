@@ -28,6 +28,7 @@ public class TaskList {
      * @param tasks The list of tasks to initialize the task list with.
      */
     public TaskList(List<Task> tasks) {
+        assert tasks != null : "Tasks list cannot be null";
         this.tasks = tasks;
     }
 
@@ -46,6 +47,7 @@ public class TaskList {
      * @param task The task to be added.
      */
     public void addTask(Task task) {
+        assert task != null : "Task to add cannot be null";
         tasks.add(task);
     }
 
@@ -153,6 +155,8 @@ public class TaskList {
      * @return A list of tasks whose descriptions contain the specified keyword.
      */
     public List<Task> findTasks(String keyword) {
+        assert keyword != null && !keyword.isBlank() : "Search keyword cannot be null or empty";
+
         return this.tasks.stream()
                 .filter(task -> task.getDescription().toLowerCase().contains(keyword.toLowerCase()))
                 .collect(Collectors.toList());

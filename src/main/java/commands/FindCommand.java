@@ -22,6 +22,7 @@ public class FindCommand extends Command {
      * @param keyword The keyword to search for in task descriptions.
      */
     public FindCommand(String keyword) {
+        assert keyword != null && !keyword.isBlank() : "Keyword cannot be null or empty";
         this.keyword = keyword;
     }
 
@@ -38,10 +39,14 @@ public class FindCommand extends Command {
      */
     @Override
     public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
+        assert taskList != null : "Task list cannot be null";
+        assert ui != null : "UI cannot be null";
+
         List<Task> matchingTasks = taskList.findTasks(keyword);
+        assert matchingTasks != null : "Matching tasks list should not be null";
 
         if (matchingTasks.isEmpty()) {
-            return ui.formatMessage("No matching tasks found");
+            return "No matching tasks found";
         } else {
             return ui.showTaskList(matchingTasks);
         }

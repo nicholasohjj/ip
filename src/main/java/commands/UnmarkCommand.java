@@ -23,6 +23,7 @@ public class UnmarkCommand extends Command {
      * @param unmarkIndices The indices of the tasks to be unmarked as not done (zero-based).
      */
     public UnmarkCommand(int... unmarkIndices) {
+        assert unmarkIndices != null && unmarkIndices.length > 0 : "Unmark indices cannot be null or empty";
         this.unmarkIndices = unmarkIndices;
     }
 
@@ -38,9 +39,15 @@ public class UnmarkCommand extends Command {
      */
     @Override
     public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
+        assert taskList != null : "Task list cannot be null";
+        assert ui != null : "UI cannot be null";
+        assert storage != null : "Storage cannot be null";
+
         StringBuilder confirmationMessage = new StringBuilder();
 
         for (int index : unmarkIndices) {
+            assert index >= 0 : "Task index must be non-negative";
+
             if (!taskList.isValidIndex(index)) {
                 throw new InvalidTaskNumberException("Invalid task number. Please enter a number between 1 and "
                         + taskList.size() + ".");
@@ -48,16 +55,16 @@ public class UnmarkCommand extends Command {
 
             try {
                 taskList.unmarkTask(index);
-                confirmationMessage.append(ui.formatMessage("OK, I've marked this task as not done yet:\n  "
-                        + taskList.getTask(index))).append("\n");
+                confirmationMessage.append("OK, I've marked this task as not done yet:\n  ")
+                        .append(taskList.getTask(index)).append("\n");
             } catch (IllegalStateException e) {
-                return ui.showError("Error: Task is already unmarked.");
+                return "Error: Task is already unmarked.";
             }
 
             try {
                 storage.overwriteTasks(taskList.getTasks());
             } catch (IOException e) {
-                return ui.showError("Error saving updated task list: " + e.getMessage());
+                return "Error saving updated task list: " + e.getMessage();
             }
         }
         return confirmationMessage.toString();

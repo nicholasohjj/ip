@@ -32,6 +32,8 @@ public class Parser {
      * @throws NiniException If the input command is invalid or has missing/incorrect arguments.
      */
     public Command parseCommand(String input) throws NiniException {
+        assert input != null && !input.isBlank() : "Input command cannot be null or empty";
+
         String[] parts = input.split(" ", 2);
         String commandType = parts[0].toLowerCase();
         String details = parts.length > 1 ? parts[1].trim() : "";
@@ -80,6 +82,8 @@ public class Parser {
 
 
     private int[] parseIndices(String input) throws InvalidFormatException {
+        assert input != null && !input.isBlank() : "Task indices input cannot be null or empty";
+
         try {
             String[] parts = input.split("\\s+"); // Split input by spaces
             int[] indices = new int[parts.length];
@@ -96,6 +100,8 @@ public class Parser {
 
 
     private void validateArguments(String input, String... errorMessages) throws InvalidFormatException {
+        assert errorMessages.length > 0 : "Error message cannot be empty";
+
         if (input.isEmpty()) {
             throw new InvalidFormatException(String.join(" ", errorMessages));
         }

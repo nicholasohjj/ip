@@ -1,5 +1,7 @@
 package tasks;
 
+import java.time.LocalDateTime;
+
 /**
  * Represents a to-do task that does not have any specific date or time.
  * This class extends the {@code Task} class and provides implementation
@@ -15,6 +17,7 @@ public class ToDoTask extends Task {
      */
     public ToDoTask(String description) {
         super(description);
+        assert description != null && !description.isBlank() : "Description must not be null or empty.";
     }
 
     /**
@@ -26,6 +29,7 @@ public class ToDoTask extends Task {
      */
     public ToDoTask(String description, boolean isDone) {
         super(description, isDone);
+        assert description != null && !description.isBlank() : "Description must not be null or empty.";
     }
 
     /**
@@ -41,6 +45,7 @@ public class ToDoTask extends Task {
      */
     @Override
     public String serialize() {
+        assert description != null : "Description must not be null";
         return String.format("T|%d|%s", isDone ? 1 : 0, description);
     }
 
@@ -52,6 +57,12 @@ public class ToDoTask extends Task {
      */
     @Override
     public String toString() {
+        assert description != null : "Description should not be null when generating string representation.";
         return "[T]" + super.toString();
+    }
+
+    @Override
+    public LocalDateTime getRelevantDate() {
+        return null;
     }
 }
