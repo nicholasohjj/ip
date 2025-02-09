@@ -67,7 +67,7 @@ class EventTaskTest {
     void testToString() {
         try {
             EventTask task = new EventTask("Conference", "25/12/2025 0900", "25/12/2025 1700", false);
-            assertEquals("[E][ ] Conference (from: Dec 25 2025, 9:00am to: Dec 25 2025, 5:00pm)", task.toString());
+            assertEquals("[E][ ] Conference (from: Dec 25 2025, 9:00AM to: Dec 25 2025, 5:00PM)", task.toString());
         } catch (NiniException e) {
             fail("Exception should not have been thrown for valid input.");
         }

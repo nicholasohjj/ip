@@ -60,7 +60,7 @@ public class DeadlineTaskTest {
     void testToString() {
         try {
             DeadlineTask task = new DeadlineTask("Submit report", "25/12/2025 1800", false);
-            assertEquals("[D][ ] Submit report (deadline: Dec 25 2025, 6:00pm)", task.toString());
+            assertEquals("[D][ ] Submit report (deadline: Dec 25 2025, 6:00PM)", task.toString());
         } catch (NiniException e) {
             fail("Exception should not have been thrown for valid input.");
         }
