@@ -46,6 +46,11 @@ public class MainWindow extends AnchorPane {
      */
     @FXML
     public void initialize() {
+        assert scrollPane != null : "ScrollPane should be properly initialized";
+        assert dialogContainer != null : "DialogContainer should be properly initialized";
+        assert userInput != null : "UserInput should be properly initialized";
+        assert sendButton != null : "SendButton should be properly initialized";
+
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
         dialogContainer.prefWidthProperty().bind(scrollPane.widthProperty());
 
@@ -55,6 +60,9 @@ public class MainWindow extends AnchorPane {
 
         userImage = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/user_image.jpg")));
         botImage = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/user_image.jpg")));
+
+        assert userImage != null : "UserImage should be properly initialized";
+
 
         setupTaskList();
     }
@@ -68,10 +76,11 @@ public class MainWindow extends AnchorPane {
         try {
             tasks = storage.loadTasks();
         } catch (IOException | NiniException e) {
-            ui.showError("Error loading tasks: " + e.getMessage());
+            System.err.println("Error loading tasks: " + e.getMessage());
             tasks = new ArrayList<>(); // Provide an empty list if loading fails
         }
 
+        assert tasks != null : "Tasks should be properly initialized";
         this.taskList = new TaskList(tasks);
     }
 
@@ -80,6 +89,8 @@ public class MainWindow extends AnchorPane {
      */
     public void showGreetingUI() {
         String welcomeMessage = ui.showGreeting();
+        assert welcomeMessage != null : "Welcome message should be properly initialized";
+
         dialogContainer.getChildren().add(DialogBox.getBotDialog(welcomeMessage, botImage));
     }
 
@@ -90,6 +101,8 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String userText = userInput.getText();
+        assert userText != null : "UserInput should be properly initialized";
+
         if (userText.isEmpty()) {
             return;
         }
@@ -97,12 +110,17 @@ public class MainWindow extends AnchorPane {
         String responseText;
         try {
             Command command = parser.parseCommand(userText);
+            assert command != null : "Command should be properly initialized";
+
             responseText = command.execute(taskList, ui, storage);
+            assert responseText != null : "Response text should be properly initialized";
+
             if (command.isExit()) {
                 System.exit(0);
             }
         } catch (NiniException e) {
             responseText = e.getMessage();
+            assert responseText != null : "Exception message should not be null";
         }
 
         dialogContainer.getChildren().addAll(

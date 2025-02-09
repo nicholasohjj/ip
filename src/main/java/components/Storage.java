@@ -35,6 +35,7 @@ public class Storage {
      * @param fileName The path to the file where tasks will be stored.
      */
     public Storage(String fileName) {
+        assert fileName != null && !fileName.isBlank() : "File name cannot be null or empty";
         this.fileName = fileName;
     }
 
@@ -68,6 +69,8 @@ public class Storage {
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
+                assert line != null : "Read line should not be null";
+
                 Task task = Task.deserialize(line);
                 tasks.add(task);
             }
@@ -82,6 +85,7 @@ public class Storage {
      * @throws NiniException If an error occurs while writing to the file.
      */
     public void saveTask(Task task) throws IOException {
+        assert task != null : "Task cannot be null";
         ensureFileDirectoryExists();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
             writer.write(task.serialize() + System.lineSeparator());
@@ -96,9 +100,11 @@ public class Storage {
      * @throws NiniException If an error occurs while writing to the file.
      */
     public void overwriteTasks(List<Task> tasks) throws IOException {
+        assert tasks != null : "Tasks list cannot be null";
         ensureFileDirectoryExists();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for (Task task : tasks) {
+                assert task != null : "Task in list cannot be null";
                 writer.write(task.serialize() + System.lineSeparator());
             }
         }

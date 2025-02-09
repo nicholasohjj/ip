@@ -24,6 +24,9 @@ public class DialogBox extends HBox {
     private ImageView displayPicture;
 
     private DialogBox(String message, Image img) {
+        assert message != null && !message.isBlank() : "Message cannot be null or empty";
+        assert img != null : "Image cannot be null";
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DialogBox.fxml"));
             loader.setController(this);
@@ -42,18 +45,23 @@ public class DialogBox extends HBox {
      */
     private void flip() {
         ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
+        assert !tmp.isEmpty() : "Dialog box must contain elements before flipping";
         Collections.reverse(tmp);
         getChildren().setAll(tmp);
         setAlignment(Pos.TOP_LEFT);
     }
 
     public static DialogBox getUserDialog(String message, Image img) {
+        assert message != null && !message.isBlank() : "User message cannot be null or empty";
+        assert img != null : "User image cannot be null";
         DialogBox db = new DialogBox(message, img);
         db.getStyleClass().add("user-dialog");
         return db;
     }
 
     public static DialogBox getBotDialog(String message, Image img) {
+        assert message != null && !message.isBlank() : "Bot message cannot be null or empty";
+        assert img != null : "Bot image cannot be null";
         DialogBox db = new DialogBox(message, img);
         db.flip();
         db.getStyleClass().add("bot-dialog");

@@ -22,6 +22,6 @@ public class SortCommand extends Command {
     @Override
     public String execute(TaskList taskList, Ui ui, Storage storage) {
         taskList.sortTasks();
-        return ui.formatMessage("Tasks sorted by date!");
+        return "Tasks sorted by date!";
     }
 }

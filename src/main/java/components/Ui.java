@@ -10,20 +10,18 @@ import tasks.Task;
  */
 public class Ui {
 
-    private static final String LINE = "____________________________________________________________";
-
     /**
      * Displays a greeting message when the program starts.
      */
     public String showGreeting() {
-        return formatMessage(" Hello! I'm NiniNana\n What can I do for you?");
+        return "Hello! I'm NiniNana\n What can I do for you?";
     }
 
     /**
      * Displays a goodbye message when the program exits.
      */
     public String showGoodbye() {
-        return formatMessage("Bye. Hope to see you again soon!");
+        return "Bye. Hope to see you again soon!";
     }
 
     /**
@@ -32,7 +30,7 @@ public class Ui {
      * @param errorMessage The error message to be displayed.
      */
     public String showError(String errorMessage) {
-        return formatMessage(errorMessage);
+        return errorMessage;
     }
 
     /**
@@ -42,7 +40,7 @@ public class Ui {
      */
     public String showTaskList(List<Task> tasks) {
         if (tasks.isEmpty()) {
-            return formatMessage("The list is empty.");
+            return "The list is empty.";
         } else {
             StringBuilder listMessage = new StringBuilder("Here are the tasks in your list:\n");
             for (int i = 0; i < tasks.size(); i++) {
@@ -57,12 +55,12 @@ public class Ui {
      *
      * @param task The task that was added.
      * @param size The total number of tasks after the addition.
-     * @return
+     * @return     String message showing task added
      */
     public String showTaskAdded(Task task, int size) {
-        return formatMessage(String.format(
+        return String.format(
                 "Got it. I've added this task:\n  %s\nNow you have %d tasks in the list.",
-                task, size));
+                task, size);
     }
 
     /**
@@ -72,19 +70,9 @@ public class Ui {
      * @param size The total number of tasks after the removal.
      */
     public String showTaskRemoved(Task task, int size) {
-        return formatMessage(String.format(
+        return String.format(
                 "Noted. I've removed this task:\n  %s\nNow you have %d tasks in the list.",
-                task, size));
-    }
-
-    /**
-     * Formats a message with horizontal lines for consistency.
-     *
-     * @param message The message to format.
-     * @return The formatted message.
-     */
-    public String formatMessage(String message) {
-        return String.format("%s%n%s%n%s", LINE, message, LINE);
+                task, size);
     }
 
 }

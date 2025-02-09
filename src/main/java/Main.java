@@ -15,9 +15,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        assert stage != null : "Stage must not be null at the start of the application";
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
+            assert ap != null : "MainWindow.fxml could not be loaded";
+
             Scene scene = new Scene(ap);
             stage.setScene(scene);
             stage.setTitle("Nininana");
@@ -25,10 +28,15 @@ public class Main extends Application {
             stage.setMinHeight(600.0);
             stage.setMinWidth(400.0);
 
-            scene.getStylesheets().add(Objects.requireNonNull(getClass()
-                    .getResource("/css/main.css")).toExternalForm());
+            String stylesheet = Objects.requireNonNull(getClass()
+                    .getResource("/css/main.css")).toExternalForm();
+            assert stylesheet != null : "MainWindow.css could not be loaded";
+
+            scene.getStylesheets().add(stylesheet);
 
             MainWindow controller = fxmlLoader.getController();
+            assert controller != null : "MainWindow.fxml could not be loaded";
+
             controller.showGreetingUI();
 
             stage.show();
