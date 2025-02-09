@@ -3,6 +3,7 @@ package tasks;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Locale;
 
 import exceptions.InvalidFormatException;
 import exceptions.NiniException;
@@ -14,8 +15,10 @@ import exceptions.NiniException;
  */
 public class DeadlineTask extends Task {
 
-    private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-    private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
+    private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm",
+            Locale.ENGLISH);
+    private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma",
+            Locale.ENGLISH);
     private final LocalDateTime deadline;
 
     /**
