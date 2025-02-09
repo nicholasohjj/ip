@@ -9,6 +9,7 @@ import components.Storage;
 import components.TaskList;
 import components.Ui;
 import exceptions.NiniException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -58,13 +59,26 @@ public class MainWindow extends AnchorPane {
         storage = new Storage();
         parser = new Parser();
 
-        userImage = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/user_image.jpg")));
-        botImage = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/user_image.jpg")));
-
-        assert userImage != null : "UserImage should be properly initialized";
-
+        userImage = loadImage("/images/user_image.jpg", "User image");
+        botImage = loadImage("/images/bot_image.jpg", "Bot image");
 
         setupTaskList();
+    }
+
+    /**
+     * Safely loads an image resource.
+     *
+     * @param path The path to the image resource.
+     * @param description The description for logging purposes.
+     * @return The loaded image or a default placeholder if loading fails.
+     */
+    private Image loadImage(String path, String description) {
+        try {
+            return new Image(Objects.requireNonNull(this.getClass().getResourceAsStream(path)));
+        } catch (NullPointerException e) {
+            System.err.println("Error: " + description + " not found at " + path);
+            return new Image(Objects.requireNonNull(this.getClass().getResourceAsStream("/images/default.png")));
+        }
     }
 
     /**
@@ -78,11 +92,23 @@ public class MainWindow extends AnchorPane {
         } catch (IOException | NiniException e) {
             System.err.println("Error loading tasks: " + e.getMessage());
             tasks = new ArrayList<>(); // Provide an empty list if loading fails
+            Platform.runLater(() -> showErrorUI("Failed to load tasks. Starting with an empty list."));
         }
 
         assert tasks != null : "Tasks should be properly initialized";
         this.taskList = new TaskList(tasks);
     }
+
+
+    /**
+     * Displays an error message in the UI.
+     *
+     * @param message The error message to display.
+     */
+    private void showErrorUI(String message) {
+        dialogContainer.getChildren().add(DialogBox.getBotDialog(message, botImage));
+    }
+
 
     /**
      * Displays the greeting message in the UI when the application starts.
@@ -100,7 +126,7 @@ public class MainWindow extends AnchorPane {
      */
     @FXML
     private void handleUserInput() {
-        String userText = userInput.getText();
+        String userText = userInput.getText().trim();
         assert userText != null : "UserInput should be properly initialized";
 
         if (userText.isEmpty()) {
@@ -123,11 +149,20 @@ public class MainWindow extends AnchorPane {
             assert responseText != null : "Exception message should not be null";
         }
 
-        dialogContainer.getChildren().addAll(
+        updateUI(userText, responseText);
+        userInput.clear();
+    }
+
+    /**
+     * Updates the UI with the user input and the bot's response.
+     *
+     * @param userText The user's input text.
+     * @param responseText The bot's response text.
+     */
+    private void updateUI(String userText, String responseText) {
+        Platform.runLater(() -> dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(userText, userImage),
                 DialogBox.getBotDialog(responseText, botImage)
-        );
-
-        userInput.clear();
+        ));
     }
 }

@@ -13,6 +13,7 @@ import tasks.Task;
  */
 public class TaskList {
 
+    private static final String ERROR_INVALID_INDEX = "Error: Invalid task index.";
     private final List<Task> tasks;
 
     /**
@@ -29,7 +30,7 @@ public class TaskList {
      */
     public TaskList(List<Task> tasks) {
         assert tasks != null : "Tasks list cannot be null";
-        this.tasks = tasks;
+        this.tasks = new ArrayList<>(tasks);
     }
 
     /**
@@ -38,7 +39,7 @@ public class TaskList {
      * @return The {@code ArrayList} containing all tasks.
      */
     public List<Task> getTasks() {
-        return tasks;
+        return new ArrayList<>(tasks);
     }
 
     /**
@@ -67,9 +68,7 @@ public class TaskList {
      * @return The removed task.
      */
     public Task removeTask(int index) {
-        if (!isValidIndex(index)) {
-            throw new IndexOutOfBoundsException("Error: Invalid task index.");
-        }
+        validateIndex(index);
         return tasks.remove(index);
     }
 
@@ -80,9 +79,7 @@ public class TaskList {
      * @return The task at the given index.
      */
     public Task getTask(int index) {
-        if (!isValidIndex(index)) {
-            throw new IndexOutOfBoundsException("Error: Invalid task index.");
-        }
+        validateIndex(index);
         return tasks.get(index);
     }
 
@@ -92,9 +89,7 @@ public class TaskList {
      * @param index The index of the task to mark as done.
      */
     public void markTask(int index) {
-        if (!isValidIndex(index)) {
-            throw new IndexOutOfBoundsException("Error: Invalid task index.");
-        }
+        validateIndex(index);
         tasks.get(index).markAsDone();
     }
 
@@ -104,20 +99,21 @@ public class TaskList {
      * @param index The index of the task to unmark.
      */
     public void unmarkTask(int index) {
-        if (!isValidIndex(index)) {
-            throw new IndexOutOfBoundsException("Error: Invalid task index.");
-        }
+        validateIndex(index);
         tasks.get(index).unmark();
     }
 
+
     /**
-     * Checks if the provided index is valid within the task list.
+     * Checks if the provided index is within the valid range of the task list.
      *
      * @param index The index to validate.
-     * @return {@code true} if the index is valid, {@code false} otherwise.
+     * @throws IndexOutOfBoundsException If the index is out of range.
      */
-    public boolean isValidIndex(int index) {
-        return index >= 0 && index < tasks.size();
+    private void validateIndex(int index) {
+        if (index < 0 || index >= tasks.size()) {
+            throw new IndexOutOfBoundsException(ERROR_INVALID_INDEX);
+        }
     }
 
     /**
@@ -155,8 +151,11 @@ public class TaskList {
      * @return A list of tasks whose descriptions contain the specified keyword.
      */
     public List<Task> findTasks(String keyword) {
-        assert keyword != null && !keyword.isBlank() : "Search keyword cannot be null or empty";
+        assert !keyword.isBlank() : "Search keyword cannot be null or empty";
 
+        if (keyword.isBlank()) {
+            throw new IllegalArgumentException("Search keyword cannot be null or empty");
+        }
         return this.tasks.stream()
                 .filter(task -> task.getDescription().toLowerCase().contains(keyword.toLowerCase()))
                 .collect(Collectors.toList());
