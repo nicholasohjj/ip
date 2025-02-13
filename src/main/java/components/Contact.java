@@ -2,6 +2,8 @@ package components;
 
 import java.util.Objects;
 
+import exceptions.InvalidDataException;
+
 /**
  * Represents a contact in the application.
  */
@@ -23,12 +25,42 @@ public class Contact {
         return name;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    /**
+     * Serializes the contact into a string format for storage.
+     *
+     * @return A string representation of the contact.
+     */
+    public String serialize() {
+        return String.format("%s | %s | %s", name, phoneNumber, email);
     }
 
-    public String getEmail() {
-        return email;
+    /**
+     * Deserializes a string into a Contact object.
+     *
+     * @param data The serialized string representation of a contact.
+     * @return A Contact object reconstructed from the serialized data.
+     * @throws InvalidDataException If the data is invalid, incorrectly formatted, or incomplete.
+     */
+    public static Contact deserialize(String data) throws InvalidDataException {
+        if (data == null || data.isBlank()) {
+            throw new InvalidDataException("Cannot deserialize null or empty data.");
+        }
+
+        String[] parts = data.split("\\|");
+
+        if (parts.length < 3) {
+            throw new InvalidDataException("Incomplete data for contact deserialization.");
+        }
+
+        String name = parts[0].trim();
+        String phoneNumber = parts[1].trim();
+        String email = parts[2].trim();
+
+        if (name.isEmpty() || phoneNumber.isEmpty() || email.isEmpty()) {
+            throw new InvalidDataException("Contact details cannot be empty.");
+        }
+
+        return new Contact(name, phoneNumber, email);
     }
 
     @Override

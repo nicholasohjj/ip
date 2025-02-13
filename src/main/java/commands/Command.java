@@ -1,7 +1,9 @@
 package commands;
 
-import components.Storage;
+import components.ContactList;
+import components.ContactStorage;
 import components.TaskList;
+import components.TaskStorage;
 import exceptions.NiniException;
 
 /**
@@ -10,14 +12,8 @@ import exceptions.NiniException;
  */
 public abstract class Command {
 
-    /**
-     * Executes the command using the provided task list, user interface, and storage components.
-     *
-     * @param taskList The task list that stores tasks.
-     * @param storage  The storage component that handles saving and loading tasks.
-     * @throws NiniException If an error occurs during execution.
-     */
-    public abstract String execute(TaskList taskList, Storage storage) throws NiniException;
+    public abstract String execute(TaskList taskList, ContactList contactList,
+                                   TaskStorage taskStorage, ContactStorage contactStorage) throws NiniException;
 
     /**
      * Determines whether the command should cause the program to exit.
@@ -29,5 +25,4 @@ public abstract class Command {
     public boolean isExit() {
         return false;
     }
-
 }

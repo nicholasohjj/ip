@@ -1,10 +1,13 @@
-package commands;
+package commands.tasks;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
-import components.Storage;
+import commands.Command;
+import components.ContactList;
+import components.ContactStorage;
 import components.TaskList;
+import components.TaskStorage;
 import exceptions.NiniException;
 import tasks.Task;
 
@@ -12,7 +15,7 @@ import tasks.Task;
  * Represents a command that finds tasks in the task list based on a keyword.
  * The search is case-insensitive and matches tasks whose descriptions contain the keyword.
  */
-public class FindCommand extends Command {
+public class FindTaskCommand extends Command {
 
     private static final String ASSERT_KEYWORD_NULL = "Keyword cannot be null or empty";
     private static final String ASSERT_TASKLIST_NULL = "Task list cannot be null";
@@ -27,7 +30,7 @@ public class FindCommand extends Command {
      *
      * @param keyword The keyword to search for in task descriptions.
      */
-    public FindCommand(String keyword) {
+    public FindTaskCommand(String keyword) {
         assert keyword != null && !keyword.isBlank() : ASSERT_KEYWORD_NULL;
         this.keyword = keyword;
     }
@@ -38,12 +41,13 @@ public class FindCommand extends Command {
      * indicating no matches is shown.
      *
      * @param taskList The list of tasks to search within.
-     * @param storage  The storage component (not used in this command).
+     * @param taskStorage  The storage component (not used in this command).
      * @return         A list of tasks matching the keyword
      * @throws NiniException If an error occurs during execution.
      */
     @Override
-    public String execute(TaskList taskList, Storage storage) throws NiniException {
+    public String execute(TaskList taskList, ContactList contactList,
+                          TaskStorage taskStorage, ContactStorage contactStorage) throws NiniException {
         assert taskList != null : ASSERT_TASKLIST_NULL;
 
         List<Task> matchingTasks = searchTasks(taskList);

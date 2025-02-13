@@ -17,7 +17,7 @@ import tasks.Task;
  * This class manages reading and writing task data to a file, ensuring
  * persistence of task lists between program runs.
  */
-public class Storage {
+public class TaskStorage {
     private static final String DEFAULT_FILE_PATH = "./data/chat.txt";
     private static final String DATA_DIRECTORY = "./data";
 
@@ -26,7 +26,7 @@ public class Storage {
     /**
      * Constructs a {@code Storage} object with the default file path {@code ./data/chat.txt}.
      */
-    public Storage() {
+    public TaskStorage() {
         this(DEFAULT_FILE_PATH);
     }
 
@@ -35,7 +35,7 @@ public class Storage {
      *
      * @param fileName The path to the file where tasks will be stored.
      */
-    public Storage(String fileName) {
+    public TaskStorage(String fileName) {
         assert fileName != null && !fileName.isBlank() : "File name cannot be null or empty";
         this.fileName = fileName;
     }

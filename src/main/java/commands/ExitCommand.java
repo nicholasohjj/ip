@@ -1,7 +1,9 @@
 package commands;
 
-import components.Storage;
+import components.ContactList;
+import components.ContactStorage;
 import components.TaskList;
+import components.TaskStorage;
 
 /**
  * Represents a command to exit the program.
@@ -16,11 +18,12 @@ public class ExitCommand extends Command {
      * Displays a goodbye message to the user.
      *
      * @param taskList The task list (not modified by this command).
-     * @param storage  The storage component (not used by this command).
+     * @param taskStorage  The storage component (not used by this command).
      * @return         The goodbye message
      */
     @Override
-    public String execute(TaskList taskList, Storage storage) {
+    public String execute(TaskList taskList, ContactList contactList,
+                          TaskStorage taskStorage, ContactStorage contactStorage) {
         return GOODBYE_MESSAGE;
     }
 
