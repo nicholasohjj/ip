@@ -1,3 +1,4 @@
+package ui;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -33,7 +34,7 @@ public class DialogBox extends HBox {
             loader.setRoot(this);
             loader.load();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load DialogBox.fxml", e);
+            throw new RuntimeException("Failed to load ui.DialogBox.fxml", e);
         }
 
         assert text != null : "FXML 'text' label is not loaded";

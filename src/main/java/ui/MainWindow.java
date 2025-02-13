@@ -1,13 +1,17 @@
+package ui;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import commands.Command;
+import components.Contact;
+import components.ContactList;
+import components.ContactStorage;
 import components.Parser;
-import components.Storage;
 import components.TaskList;
-import components.Ui;
+import components.TaskStorage;
 import exceptions.NiniException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -24,6 +28,9 @@ import tasks.Task;
  * Handles user input, manages UI elements, and interacts with core application logic.
  */
 public class MainWindow extends AnchorPane {
+
+    private static final String GREETING_MESSAGE = "Hello! I'm NiniNana\nWhat can I do for you?";
+
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -33,10 +40,11 @@ public class MainWindow extends AnchorPane {
     @FXML
     private Button sendButton;
 
-    private Ui ui;
-    private Storage storage;
+    private TaskStorage taskStorage;
     private Parser parser;
     private TaskList taskList;
+    private ContactList contactList;
+    private ContactStorage contactStorage;
 
     private Image userImage;
     private Image botImage;
@@ -54,14 +62,15 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
         dialogContainer.prefWidthProperty().bind(scrollPane.widthProperty());
 
-        ui = new Ui();
-        storage = new Storage();
+        taskStorage = new TaskStorage();
+        contactStorage = new ContactStorage();
         parser = new Parser();
 
         userImage = loadImage("/images/user_image.jpg", "User image");
         botImage = loadImage("/images/bot_image.jpg", "Bot image");
 
         setupTaskList();
+        setupContactList();
     }
 
     /**
@@ -81,13 +90,13 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Loads tasks from storage and initializes the task list.
+     * Loads tasks from taskStorage and initializes the task list.
      * If loading fails, an empty task list is created instead.
      */
     private void setupTaskList() {
         List<Task> tasks;
         try {
-            tasks = storage.loadTasks();
+            tasks = taskStorage.loadTasks();
         } catch (IOException | NiniException e) {
             System.err.println("Error loading tasks: " + e.getMessage());
             tasks = new ArrayList<>(); // Provide an empty list if loading fails
@@ -96,6 +105,24 @@ public class MainWindow extends AnchorPane {
 
         assert tasks != null : "Tasks should be properly initialized";
         this.taskList = new TaskList(tasks);
+    }
+
+    /**
+     * Loads tasks from contactStorage and initializes the task list.
+     * If loading fails, an empty contact list is created instead.
+     */
+    private void setupContactList() {
+        List<Contact> contacts;
+        try {
+            contacts = contactStorage.loadContacts();
+        } catch (IOException | NiniException e) {
+            System.err.println("Error loading tasks: " + e.getMessage());
+            contacts = new ArrayList<>(); // Provide an empty list if loading fails
+            Platform.runLater(() -> showErrorUI("Failed to load contacts. Starting with an empty list."));
+        }
+
+        assert contacts != null : "Contacts should be properly initialized";
+        this.contactList = new ContactList(contacts);
     }
 
 
@@ -113,10 +140,7 @@ public class MainWindow extends AnchorPane {
      * Displays the greeting message in the UI when the application starts.
      */
     public void showGreetingUI() {
-        String welcomeMessage = ui.showGreeting();
-        assert welcomeMessage != null : "Welcome message should be properly initialized";
-
-        dialogContainer.getChildren().add(DialogBox.getBotDialog(welcomeMessage, botImage));
+        dialogContainer.getChildren().add(DialogBox.getBotDialog(GREETING_MESSAGE, botImage));
     }
 
     /**
@@ -126,7 +150,6 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String userText = userInput.getText().trim();
-        assert userText != null : "UserInput should be properly initialized";
 
         if (userText.isEmpty()) {
             return;
@@ -137,7 +160,7 @@ public class MainWindow extends AnchorPane {
             Command command = parser.parseCommand(userText);
             assert command != null : "Command should be properly initialized";
 
-            responseText = command.execute(taskList, ui, storage);
+            responseText = command.execute(taskList, contactList, taskStorage, contactStorage);
             assert responseText != null : "Response text should be properly initialized";
 
             if (command.isExit()) {

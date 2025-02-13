@@ -8,14 +8,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import commands.AddCommand;
 import commands.Command;
-import commands.DeleteCommand;
 import commands.ExitCommand;
-import commands.ListCommand;
-import commands.MarkCommand;
-import commands.SortCommand;
-import commands.UnmarkCommand;
+import commands.tasks.AddTaskCommand;
+import commands.tasks.DeleteTaskCommand;
+import commands.tasks.ListTaskCommand;
+import commands.tasks.MarkTaskCommand;
+import commands.tasks.SortTaskCommand;
+import commands.tasks.UnmarkTaskCommand;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidFormatException;
 import exceptions.NiniException;
@@ -38,7 +38,7 @@ class ParserTest {
 
     @Test
     void testParseListCommand() throws NiniException {
-        assertTrue(parser.parseCommand("list") instanceof ListCommand);
+        assertTrue(parser.parseCommand("listtasks") instanceof ListTaskCommand);
     }
 
     @Test
@@ -48,7 +48,7 @@ class ParserTest {
 
     @Test
     void testParseSortCommand() throws NiniException {
-        assertTrue(parser.parseCommand("sort") instanceof SortCommand);
+        assertTrue(parser.parseCommand("sorttasks") instanceof SortTaskCommand);
     }
 
     // ===========================
@@ -57,23 +57,23 @@ class ParserTest {
 
     @Test
     void testParseMarkCommand() throws NiniException {
-        Command command = parser.parseCommand("mark 1 3 5");
-        assertTrue(command instanceof MarkCommand);
-        assertArrayEquals(new int[]{0, 2, 4}, ((MarkCommand) command).getMarkIndices());
+        Command command = parser.parseCommand("marktasks 1 3 5");
+        assertTrue(command instanceof MarkTaskCommand);
+        assertArrayEquals(new int[]{0, 2, 4}, ((MarkTaskCommand) command).getMarkIndices());
     }
 
     @Test
     void testParseUnmarkCommand() throws NiniException {
-        Command command = parser.parseCommand("unmark 2 4");
-        assertTrue(command instanceof UnmarkCommand);
-        assertArrayEquals(new int[]{1, 3}, ((UnmarkCommand) command).getUnmarkIndices());
+        Command command = parser.parseCommand("unmarktasks 2 4");
+        assertTrue(command instanceof UnmarkTaskCommand);
+        assertArrayEquals(new int[]{1, 3}, ((UnmarkTaskCommand) command).getUnmarkIndices());
     }
 
     @Test
     void testParseDeleteCommand() throws NiniException {
-        Command command = parser.parseCommand("delete 3 5 7");
-        assertTrue(command instanceof DeleteCommand);
-        assertArrayEquals(new int[]{2, 4, 6}, ((DeleteCommand) command).getDeleteIndices());
+        Command command = parser.parseCommand("deletetasks 3 5 7");
+        assertTrue(command instanceof DeleteTaskCommand);
+        assertArrayEquals(new int[]{2, 4, 6}, ((DeleteTaskCommand) command).getDeleteIndices());
     }
 
     // ======================
@@ -83,18 +83,18 @@ class ParserTest {
     @Test
     void testParseAddToDoCommand() throws NiniException {
         Command command = parser.parseCommand("todo Buy groceries");
-        assertTrue(command instanceof AddCommand);
-        assertTrue(((AddCommand) command).getAddedTask() instanceof ToDoTask);
-        assertEquals("Buy groceries", ((AddCommand) command).getAddedTask().getDescription());
+        assertTrue(command instanceof AddTaskCommand);
+        assertTrue(((AddTaskCommand) command).getAddedTask() instanceof ToDoTask);
+        assertEquals("Buy groceries", ((AddTaskCommand) command).getAddedTask().getDescription());
     }
 
     @Test
     void testParseAddEventCommand() throws NiniException {
         Command command = parser.parseCommand("event Meeting /from 1/1/2025 1000 /to 1/1/2025 1200");
-        assertTrue(command instanceof AddCommand);
-        assertTrue(((AddCommand) command).getAddedTask() instanceof EventTask);
+        assertTrue(command instanceof AddTaskCommand);
+        assertTrue(((AddTaskCommand) command).getAddedTask() instanceof EventTask);
 
-        EventTask task = (EventTask) ((AddCommand) command).getAddedTask();
+        EventTask task = (EventTask) ((AddTaskCommand) command).getAddedTask();
         assertEquals("Meeting", task.getDescription());
         assertEquals("2025-01-01T10:00", task.getStartDateTime().toString());
         assertEquals("2025-01-01T12:00", task.getEndDateTime().toString());
@@ -103,10 +103,10 @@ class ParserTest {
     @Test
     void testParseAddDeadlineCommand() throws NiniException {
         Command command = parser.parseCommand("deadline Submit report /by 1/1/2025 1800");
-        assertTrue(command instanceof AddCommand);
-        assertTrue(((AddCommand) command).getAddedTask() instanceof DeadlineTask);
+        assertTrue(command instanceof AddTaskCommand);
+        assertTrue(((AddTaskCommand) command).getAddedTask() instanceof DeadlineTask);
 
-        DeadlineTask task = (DeadlineTask) ((AddCommand) command).getAddedTask();
+        DeadlineTask task = (DeadlineTask) ((AddTaskCommand) command).getAddedTask();
         assertEquals("Submit report", task.getDescription());
         assertEquals("2025-01-01T18:00", task.getDeadline().toString());
     }
@@ -122,12 +122,12 @@ class ParserTest {
 
     @Test
     void testParseMarkCommandWithInvalidIndex() {
-        assertThrows(InvalidFormatException.class, () -> parser.parseCommand("mark abc"));
+        assertThrows(InvalidFormatException.class, () -> parser.parseCommand("marktasks abc"));
     }
 
     @Test
     void testParseUnmarkCommandWithInvalidIndex() {
-        assertThrows(InvalidFormatException.class, () -> parser.parseCommand("unmark abc"));
+        assertThrows(InvalidFormatException.class, () -> parser.parseCommand("unmarktasks abc"));
     }
 
     @Test

@@ -1,11 +1,13 @@
-package commands;
+package commands.tasks;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-import components.Storage;
+import commands.Command;
+import components.ContactList;
+import components.ContactStorage;
 import components.TaskList;
-import components.Ui;
+import components.TaskStorage;
 import exceptions.InvalidTaskNumberException;
 import exceptions.NiniException;
 import tasks.Task;
@@ -14,10 +16,9 @@ import tasks.Task;
  * Represents a command to unmark a task as not done.
  * This command updates the task's status, notifies the user, and updates storage.
  */
-public class UnmarkCommand extends Command {
+public class UnmarkTaskCommand extends Command {
 
     private static final String ASSERT_TASKLIST_NULL = "Task list cannot be null";
-    private static final String ASSERT_UI_NULL = "UI cannot be null";
     private static final String ASSERT_STORAGE_NULL = "Storage cannot be null";
     private static final String ASSERT_TASKINDEX_NEGATIVE = "Task index must be non-negative";
     private static final String ERROR_INVALID_TASK_NUMBER = "Invalid task number. Please enter a number between 1 and ";
@@ -32,7 +33,7 @@ public class UnmarkCommand extends Command {
      *
      * @param unmarkIndices The indices of the tasks to be unmarked as not done (zero-based).
      */
-    public UnmarkCommand(int... unmarkIndices) {
+    public UnmarkTaskCommand(int... unmarkIndices) {
         assert unmarkIndices != null && unmarkIndices.length > 0 : "Unmark indices cannot be null or empty";
         this.unmarkIndices = unmarkIndices;
     }
@@ -42,16 +43,15 @@ public class UnmarkCommand extends Command {
      * If the task index is invalid, an exception is thrown.
      *
      * @param taskList The task list containing the task.
-     * @param ui       The user interface for displaying messages.
-     * @param storage  The storage component responsible for saving tasks.
+     * @param taskStorage  The storage component responsible for saving tasks.
      * @return A confirmation message indicating the task has been unmarked.
      * @throws NiniException If the task index is invalid or an error occurs while updating storage.
      */
     @Override
-    public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
+    public String execute(TaskList taskList, ContactList contactList,
+                          TaskStorage taskStorage, ContactStorage contactStorage) throws NiniException {
         assert taskList != null : ASSERT_TASKLIST_NULL;
-        assert ui != null : ASSERT_UI_NULL;
-        assert storage != null : ASSERT_STORAGE_NULL;
+        assert taskStorage != null : ASSERT_STORAGE_NULL;
 
         StringBuilder confirmationMessage = new StringBuilder();
         int[] uniqueIndices = Arrays.stream(unmarkIndices).distinct().toArray();
@@ -66,7 +66,7 @@ public class UnmarkCommand extends Command {
                         .append(task).append("\n");
         }
 
-        updateStorage(storage, taskList, confirmationMessage);
+        updateStorage(taskStorage, taskList, confirmationMessage);
         return confirmationMessage.toString().trim();
     }
 
@@ -105,13 +105,13 @@ public class UnmarkCommand extends Command {
     /**
      * Updates storage after unmarking tasks.
      *
-     * @param storage The storage component.
+     * @param taskStorage The storage component.
      * @param taskList The updated task list.
      * @param confirmationMessage The confirmation message builder.
      */
-    private void updateStorage(Storage storage, TaskList taskList, StringBuilder confirmationMessage) {
+    private void updateStorage(TaskStorage taskStorage, TaskList taskList, StringBuilder confirmationMessage) {
         try {
-            storage.overwriteTasks(taskList.getTasks());
+            taskStorage.overwriteTasks(taskList.getTasks());
         } catch (IOException e) {
             confirmationMessage.append("\n").append(ERROR_STORAGE_UPDATE).append(e.getMessage());
         }
