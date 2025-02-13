@@ -2,7 +2,6 @@ package commands;
 
 import components.Storage;
 import components.TaskList;
-import components.Ui;
 
 /**
  * Represents a command to exit the program.
@@ -10,18 +9,19 @@ import components.Ui;
  */
 public class ExitCommand extends Command {
 
+    private static final String GOODBYE_MESSAGE = "Bye. Hope to see you again soon!";
+
     /**
      * Executes the exit command.
      * Displays a goodbye message to the user.
      *
      * @param taskList The task list (not modified by this command).
-     * @param ui       The user interface for displaying messages.
      * @param storage  The storage component (not used by this command).
      * @return         The goodbye message
      */
     @Override
-    public String execute(TaskList taskList, Ui ui, Storage storage) {
-        return ui.showGoodbye();
+    public String execute(TaskList taskList, Storage storage) {
+        return GOODBYE_MESSAGE;
     }
 
     /**

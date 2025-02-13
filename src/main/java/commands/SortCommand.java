@@ -2,7 +2,6 @@ package commands;
 
 import components.Storage;
 import components.TaskList;
-import components.Ui;
 
 /**
  * Represents a command to sort tasks by their deadlines or event start times.
@@ -15,12 +14,11 @@ public class SortCommand extends Command {
      * If the task index is invalid, an exception is thrown.
      *
      * @param taskList The task list containing the task.
-     * @param ui       The user interface for displaying messages.
      * @param storage  The storage component responsible for saving tasks.
      * @return A confirmation message indicating the task has been unmarked.
      */
     @Override
-    public String execute(TaskList taskList, Ui ui, Storage storage) {
+    public String execute(TaskList taskList, Storage storage) {
         taskList.sortTasks();
         return "Tasks sorted by date!";
     }

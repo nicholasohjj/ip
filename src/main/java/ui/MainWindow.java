@@ -1,3 +1,5 @@
+package ui;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +9,6 @@ import commands.Command;
 import components.Parser;
 import components.Storage;
 import components.TaskList;
-import components.Ui;
 import exceptions.NiniException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -24,6 +25,9 @@ import tasks.Task;
  * Handles user input, manages UI elements, and interacts with core application logic.
  */
 public class MainWindow extends AnchorPane {
+
+    private static final String GREETING_MESSAGE = "Hello! I'm NiniNana\nWhat can I do for you?";
+
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -33,7 +37,6 @@ public class MainWindow extends AnchorPane {
     @FXML
     private Button sendButton;
 
-    private Ui ui;
     private Storage storage;
     private Parser parser;
     private TaskList taskList;
@@ -54,7 +57,6 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
         dialogContainer.prefWidthProperty().bind(scrollPane.widthProperty());
 
-        ui = new Ui();
         storage = new Storage();
         parser = new Parser();
 
@@ -113,10 +115,7 @@ public class MainWindow extends AnchorPane {
      * Displays the greeting message in the UI when the application starts.
      */
     public void showGreetingUI() {
-        String welcomeMessage = ui.showGreeting();
-        assert welcomeMessage != null : "Welcome message should be properly initialized";
-
-        dialogContainer.getChildren().add(DialogBox.getBotDialog(welcomeMessage, botImage));
+        dialogContainer.getChildren().add(DialogBox.getBotDialog(GREETING_MESSAGE, botImage));
     }
 
     /**
@@ -126,7 +125,6 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String userText = userInput.getText().trim();
-        assert userText != null : "UserInput should be properly initialized";
 
         if (userText.isEmpty()) {
             return;
@@ -137,7 +135,7 @@ public class MainWindow extends AnchorPane {
             Command command = parser.parseCommand(userText);
             assert command != null : "Command should be properly initialized";
 
-            responseText = command.execute(taskList, ui, storage);
+            responseText = command.execute(taskList, storage);
             assert responseText != null : "Response text should be properly initialized";
 
             if (command.isExit()) {

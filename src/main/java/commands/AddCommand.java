@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import components.Storage;
 import components.TaskList;
-import components.Ui;
 import tasks.Task;
 
 /**
@@ -16,7 +15,6 @@ public class AddCommand extends Command {
     private static final String ERROR_STORAGE = "Error saving task to storage: ";
     private static final String ASSERT_TASK_NULL = "Task cannot be null";
     private static final String ASSERT_TASKLIST_NULL = "Task list cannot be null";
-    private static final String ASSERT_UI_NULL = "UI cannot be null";
     private static final String ASSERT_STORAGE_NULL = "Storage cannot be null";
     private static final String ASSERT_TASKLIST_SIZE = "Task list size should increase by 1";
 
@@ -38,23 +36,35 @@ public class AddCommand extends Command {
      * and saves the task to storage.
      *
      * @param taskList The task list to which the task is added.
-     * @param ui       The user interface for displaying messages.
      * @param storage  The storage component responsible for saving tasks.
      * @return
      */
     @Override
-    public String execute(TaskList taskList, Ui ui, Storage storage) {
+    public String execute(TaskList taskList, Storage storage) {
         assert taskList != null : ASSERT_TASKLIST_NULL;
-        assert ui != null : ASSERT_UI_NULL;
         assert storage != null : ASSERT_STORAGE_NULL;
 
         int initialSize = taskList.size();
         taskList.addTask(task);
         assert taskList.size() == initialSize + 1 : ASSERT_TASKLIST_SIZE;
 
-        String confirmationMessage = ui.showTaskAdded(task, taskList.size());
+        String confirmationMessage = showTaskAdded(task, taskList.size());
         return saveTaskToStorage(storage, confirmationMessage);
     }
+
+    /**
+     * Displays a message confirming that a task has been added.
+     *
+     * @param task The task that was added.
+     * @param size The total number of tasks after the addition.
+     * @return     String message showing task added
+     */
+    public String showTaskAdded(Task task, int size) {
+        return String.format(
+                "Got it. I've added this task:\n  %s\nNow you have %d tasks in the list.",
+                task, size);
+    }
+
 
     /**
      * Saves the task to storage and returns an appropriate message.

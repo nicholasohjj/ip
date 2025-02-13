@@ -1,3 +1,5 @@
+package ui;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -19,7 +21,7 @@ public class Main extends Application {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
-            assert ap != null : "MainWindow.fxml could not be loaded";
+            assert ap != null : "ui.MainWindow.fxml could not be loaded";
 
             Scene scene = new Scene(ap);
             stage.setScene(scene);
@@ -30,12 +32,12 @@ public class Main extends Application {
 
             String stylesheet = Objects.requireNonNull(getClass()
                     .getResource("/css/main.css")).toExternalForm();
-            assert stylesheet != null : "MainWindow.css could not be loaded";
+            assert stylesheet != null : "ui.MainWindow.css could not be loaded";
 
             scene.getStylesheets().add(stylesheet);
 
             MainWindow controller = fxmlLoader.getController();
-            assert controller != null : "MainWindow.fxml could not be loaded";
+            assert controller != null : "ui.MainWindow.fxml could not be loaded";
 
             controller.showGreetingUI();
 

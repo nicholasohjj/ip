@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import components.Storage;
 import components.TaskList;
-import components.Ui;
 import exceptions.InvalidTaskNumberException;
 import exceptions.NiniException;
 import tasks.Task;
@@ -17,7 +16,6 @@ import tasks.Task;
 public class DeleteCommand extends Command {
 
     private static final String ASSERT_TASKLIST_NULL = "Task list cannot be null";
-    private static final String ASSERT_UI_NULL = "UI cannot be null";
     private static final String ASSERT_STORAGE_NULL = "Storage cannot be null";
     private static final String ASSERT_TASKINDEX_NEGATIVE = "Task index must be non-negative";
     private static final String ERROR_INVALID_TASK_NUMBER = "Invalid task number. Please enter a number between 1 and ";
@@ -41,14 +39,12 @@ public class DeleteCommand extends Command {
      * and updates the storage.
      *
      * @param taskList The task list from which the task is deleted.
-     * @param ui       The user interface for displaying messages.
      * @param storage  The storage component responsible for saving tasks.
      * @throws NiniException If the task index is invalid or an error occurs while updating storage.
      */
     @Override
-    public String execute(TaskList taskList, Ui ui, Storage storage) throws NiniException {
+    public String execute(TaskList taskList, Storage storage) throws NiniException {
         assert taskList != null : ASSERT_TASKLIST_NULL;
-        assert ui != null : ASSERT_UI_NULL;
         assert storage != null : ASSERT_STORAGE_NULL;
 
         int initialSize = taskList.size();
@@ -64,11 +60,23 @@ public class DeleteCommand extends Command {
             validateIndex(taskList, taskIndex);
 
             Task removedTask = taskList.removeTask(taskIndex);
-            confirmationMessage.append(ui.showTaskRemoved(removedTask, taskList.size())).append("\n");
+            confirmationMessage.append(showTaskRemoved(removedTask, taskList.size())).append("\n");
         }
 
         updateStorage(storage, taskList, confirmationMessage, initialSize);
         return confirmationMessage.toString().trim();
+    }
+
+    /**
+     * Displays a message confirming that a task has been removed.
+     *
+     * @param task The task that was removed.
+     * @param size The total number of tasks after the removal.
+     */
+    public String showTaskRemoved(Task task, int size) {
+        return String.format(
+                "Noted. I've removed this task:\n  %s\nNow you have %d tasks in the list.",
+                task, size);
     }
 
     /**
