@@ -77,7 +77,7 @@ public class Parser {
 
     private Command parseDeadline(String details) throws NiniException {
         validateNonEmpty(details, ERROR_EMPTY_DESCRIPTION);
-        String[] deadlineParts = splitDetails(details, "/by", ERROR_INVALID_DEADLINE_FORMAT);
+        String[] deadlineParts = splitDetails(details);
 
         if (deadlineParts.length < 2 || deadlineParts[1].trim().isEmpty()) {
             throw new InvalidFormatException(ERROR_INVALID_DEADLINE_FORMAT);
@@ -125,10 +125,10 @@ public class Parser {
         }
     }
 
-    private String[] splitDetails(String details, String delimiter, String errorMessage) throws InvalidFormatException {
-        String[] parts = details.split(delimiter, -1);
+    private String[] splitDetails(String details) throws InvalidFormatException {
+        String[] parts = details.split("/by", -1);
         if (parts.length < 2 || parts[0].trim().isEmpty()) {
-            throw new InvalidFormatException(errorMessage);
+            throw new InvalidFormatException(Parser.ERROR_INVALID_DEADLINE_FORMAT);
         }
         return parts;
     }
