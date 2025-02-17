@@ -13,6 +13,7 @@ import components.Parser;
 import components.TaskList;
 import components.TaskStorage;
 import exceptions.NiniException;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,6 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import tasks.Task;
 
 /**
@@ -132,9 +134,13 @@ public class MainWindow extends AnchorPane {
      * @param message The error message to display.
      */
     private void showErrorUI(String message) {
-        dialogContainer.getChildren().add(DialogBox.getBotDialog(message, botImage));
-    }
+        Platform.runLater(() -> dialogContainer.getChildren().add(
+                DialogBox.getErrorDialog(message, botImage)
+        ));
 
+        // Shake animation for invalid input
+        animateErrorInput();
+    }
 
     /**
      * Displays the greeting message in the UI when the application starts.
@@ -151,7 +157,9 @@ public class MainWindow extends AnchorPane {
     private void handleUserInput() {
         String userText = userInput.getText().trim();
 
+
         if (userText.isEmpty()) {
+            animateErrorInput();
             return;
         }
 
@@ -165,14 +173,28 @@ public class MainWindow extends AnchorPane {
 
             if (command.isExit()) {
                 System.exit(0);
+                return;
             }
         } catch (NiniException e) {
             responseText = e.getMessage();
             assert responseText != null : "Exception message should not be null";
+            showErrorUI(responseText);
+            return;
         }
 
         updateUI(userText, responseText);
         userInput.clear();
+    }
+
+    /**
+     * Animates the input field when an invalid command is entered.
+     */
+    private void animateErrorInput() {
+        userInput.setStyle("-fx-border-color: red; -fx-background-color: #ffcccc;");
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+        pause.setOnFinished(event -> userInput.setStyle(""));
+        pause.play();
     }
 
     /**
