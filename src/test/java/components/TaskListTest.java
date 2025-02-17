@@ -27,13 +27,10 @@ class TaskListTest {
 
     @Test
     void testAddTask() {
-        // Arrange
         Task task = new ToDoTask("Test Task");
 
-        // Act
         taskList.addTask(task);
 
-        // Assert
         assertEquals(1, taskList.size());
         assertEquals(task, taskList.getTask(0));
     }
@@ -58,15 +55,12 @@ class TaskListTest {
     }
 
     @Test
-    void testMarkTask_validIndex() {
-        // Arrange
+    void testMarkTask_validIndex() throws NiniException {
         Task task = new ToDoTask("Test Task");
         taskList.addTask(task);
 
-        // Act
         taskList.markTask(0);
 
-        // Assert
         assertTrue(task.isDone());
     }
 
@@ -76,7 +70,7 @@ class TaskListTest {
     }
 
     @Test
-    void testUnmarkTask_validIndex() {
+    void testUnmarkTask_validIndex() throws NiniException {
         // Arrange
         Task task = new ToDoTask("Test Task");
         task.markAsDone();

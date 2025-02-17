@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import exceptions.NiniException;
 import tasks.Task;
 
 /**
@@ -88,7 +89,7 @@ public class TaskList {
      *
      * @param index The index of the task to mark as done.
      */
-    public void markTask(int index) {
+    public void markTask(int index) throws NiniException {
         validateIndex(index);
         tasks.get(index).markAsDone();
     }
@@ -98,7 +99,7 @@ public class TaskList {
      *
      * @param index The index of the task to unmark.
      */
-    public void unmarkTask(int index) {
+    public void unmarkTask(int index) throws NiniException {
         validateIndex(index);
         tasks.get(index).unmark();
     }

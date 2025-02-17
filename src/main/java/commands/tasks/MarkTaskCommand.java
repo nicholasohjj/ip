@@ -90,12 +90,12 @@ public class MarkTaskCommand extends Command {
      * @param taskList The task list.
      * @param taskIndex The index of the task to mark.
      * @return The marked task.
-     * @throws IllegalStateException If the task is already marked as done.
+     * @throws NiniException If the task is already marked as done.
      */
-    private Task markTaskAsDone(TaskList taskList, int taskIndex) throws IllegalStateException {
+    private Task markTaskAsDone(TaskList taskList, int taskIndex) throws NiniException {
         Task task = taskList.getTask(taskIndex);
         if (task.isDone()) {
-            throw new IllegalStateException(ERROR_ALREADY_MARKED);
+            throw new InvalidTaskNumberException(ERROR_ALREADY_MARKED);
         }
         taskList.markTask(taskIndex);
         return task;

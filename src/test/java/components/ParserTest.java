@@ -32,10 +32,6 @@ class ParserTest {
         parser = new Parser();
     }
 
-    // ========================
-    // Tests for Simple Commands
-    // ========================
-
     @Test
     void testParseListCommand() throws NiniException {
         assertTrue(parser.parseCommand("listtasks") instanceof ListTaskCommand);

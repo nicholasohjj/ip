@@ -77,7 +77,7 @@ public class UnmarkTaskCommand extends Command {
      * @param taskIndex The task index to validate.
      * @throws InvalidTaskNumberException If the index is out of bounds.
      */
-    private void validateIndex(TaskList taskList, int taskIndex) throws InvalidTaskNumberException {
+    private void validateIndex(TaskList taskList, int taskIndex) throws NiniException {
         try {
             taskList.getTask(taskIndex); // Calls TaskList's validateIndex()
         } catch (IndexOutOfBoundsException e) {
@@ -91,12 +91,12 @@ public class UnmarkTaskCommand extends Command {
      * @param taskList The task list.
      * @param taskIndex The index of the task to unmark.
      * @return The unmarked task.
-     * @throws IllegalStateException If the task is already unmarked.
+     * @throws NiniException If the task is already unmarked.
      */
-    private Task unmarkTask(TaskList taskList, int taskIndex) throws IllegalStateException {
+    private Task unmarkTask(TaskList taskList, int taskIndex) throws NiniException {
         Task task = taskList.getTask(taskIndex);
         if (!task.isDone()) {
-            throw new IllegalStateException(ERROR_ALREADY_UNMARKED);
+            throw new InvalidTaskNumberException(ERROR_ALREADY_UNMARKED);
         }
         taskList.unmarkTask(taskIndex);
         return task;

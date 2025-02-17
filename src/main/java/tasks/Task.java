@@ -3,6 +3,7 @@ package tasks;
 import java.time.LocalDateTime;
 
 import exceptions.InvalidDataException;
+import exceptions.InvalidTaskNumberException;
 import exceptions.NiniException;
 
 /**
@@ -64,11 +65,11 @@ public abstract class Task {
     /**
      * Marks the task as done.
      *
-     * @throws IllegalStateException If the task is already marked as done.
+     * @throws InvalidTaskNumberException If the task is already marked as done.
      */
-    public void markAsDone() {
+    public void markAsDone() throws NiniException {
         if (isDone) {
-            throw new IllegalStateException("Task is already marked as done");
+            throw new InvalidTaskNumberException("Task is already marked as done");
         } else {
             isDone = true;
         }
@@ -78,11 +79,11 @@ public abstract class Task {
     /**
      * Unmarks the task, setting it as not done.
      *
-     * @throws IllegalStateException If the task is already unmarked.
+     * @throws InvalidTaskNumberException If the task is already unmarked.
      */
-    public void unmark() {
+    public void unmark() throws NiniException {
         if (!isDone) {
-            throw new IllegalStateException("Task is already unmarked.");
+            throw new InvalidTaskNumberException("Task is already unmarked.");
         } else {
             isDone = false;
         }

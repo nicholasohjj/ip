@@ -138,7 +138,6 @@ public class MainWindow extends AnchorPane {
                 DialogBox.getErrorDialog(message, botImage)
         ));
 
-        // Shake animation for invalid input
         animateErrorInput();
     }
 
