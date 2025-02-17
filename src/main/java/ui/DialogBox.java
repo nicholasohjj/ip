@@ -74,4 +74,21 @@ public class DialogBox extends HBox {
         db.getStyleClass().add("bot-dialog");
         return db;
     }
+
+    /**
+     * Creates an error message dialog box.
+     *
+     * @param message The error message text.
+     * @param img The bot's profile image.
+     * @return A styled DialogBox for errors.
+     */
+    public static DialogBox getErrorDialog(String message, Image img) {
+        assert message != null && !message.isBlank() : "Error message cannot be null or empty";
+        assert img != null : "Bot image for error messages cannot be null";
+
+        DialogBox db = new DialogBox(message, img);
+        db.flip();
+        db.getStyleClass().add("error-dialog");
+        return db;
+    }
 }
