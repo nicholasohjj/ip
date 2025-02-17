@@ -61,7 +61,7 @@ public class MarkTaskCommand extends Command {
             validateIndex(taskList, index);
 
             Task task = markTaskAsDone(taskList, index);
-            confirmationMessage.append("Nice! I've marked this task as done:\n  ")
+            confirmationMessage.append("Congratulations. You completed something. I've marked this task as done:\n")
                         .append(task).append("\n");
         }
 

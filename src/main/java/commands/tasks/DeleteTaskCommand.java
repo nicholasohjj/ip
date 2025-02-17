@@ -79,7 +79,7 @@ public class DeleteTaskCommand extends Command {
      */
     public String showTaskRemoved(Task task, int size) {
         return String.format(
-                "Noted. I've removed this task:\n  %s\nNow you have %d tasks in the list.",
+                "Noted. I've removed this task:\n  %s\nAs if it was never important to begin with.",
                 task, size);
     }
 

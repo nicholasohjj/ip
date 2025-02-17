@@ -20,19 +20,23 @@
                     AnchorPane.rightAnchor="0.0"
                     AnchorPane.bottomAnchor="50.0">
             <content>
-                <VBox fx:id="dialogContainer"/>
+                <VBox fx:id="dialogContainer" styleClass="chat-container"/>
             </content>
         </ScrollPane>
+
         <TextField fx:id="userInput"
+                   styleClass="user-input"
                    AnchorPane.bottomAnchor="5.0"
                    AnchorPane.leftAnchor="5.0"
                    AnchorPane.rightAnchor="65.0"
                    onAction="#handleUserInput"/>
+
         <Button fx:id="sendButton"
-                text="Send"
+                text="Transmit"
+                styleClass="send-button"
                 onAction="#handleUserInput"
                 AnchorPane.bottomAnchor="5.0"
                 AnchorPane.rightAnchor="5.0"
-                prefWidth="60.0"/>
+                prefWidth="80.0"/>
     </children>
 </AnchorPane>

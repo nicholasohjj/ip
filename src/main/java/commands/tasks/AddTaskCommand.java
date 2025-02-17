@@ -65,7 +65,7 @@ public class AddTaskCommand extends Command {
      */
     public String showTaskAdded(Task task, int size) {
         return String.format(
-                "Got it. I've added this task:\n  %s\nNow you have %d tasks in the list.",
+                "Got it. I've added this task:\n  %s\nHopefully, you won’t procrastinate on it this time.",
                 task, size);
     }
 

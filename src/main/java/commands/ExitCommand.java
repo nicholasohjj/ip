@@ -11,7 +11,7 @@ import components.TaskStorage;
  */
 public class ExitCommand extends Command {
 
-    private static final String GOODBYE_MESSAGE = "Bye. Hope to see you again soon!";
+    private static final String GOODBYE_MESSAGE = "Shutting down. I’ll miss you... Just kidding. I feel nothing.";
 
     /**
      * Executes the exit command.

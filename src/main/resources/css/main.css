@@ -1,89 +1,67 @@
-/* Background and General Styles */
+/* Background */
 .root {
-    -fx-background-color: linear-gradient(to bottom right, #e3f2fd, #bbdefb);
-    -fx-background-image: url("../images/background.jpg");
-    -fx-background-size: cover;
+    -fx-background-color: #121212;
 }
 
-/* ScrollPane Customization */
+/* ScrollPane (dark with glow) */
 .scroll-pane {
-    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-background-color: transparent;
 }
-
 .scroll-pane .viewport {
     -fx-background-color: transparent;
 }
 
-/* Text Field Styling */
-.text-field {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #64b5f6;
-    -fx-border-radius: 5px;
-    -fx-padding: 5px;
-    -fx-font-size: 14px;
+/* Chat Bubbles */
+.user-dialog {
+    -fx-background-color: #00ffff;
+    -fx-text-fill: #000000;
+    -fx-border-color: #00bfff;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
 }
 
-.text-field:focused {
-    -fx-border-color: #1976d2;
+.bot-dialog {
+    -fx-background-color: #39ff14;
+    -fx-text-fill: #000000;
+    -fx-border-color: #00ff00;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+}
+
+/* Error Messages (Red & Blinking) */
+.error-dialog {
+    -fx-background-color: #ff0000;
+    -fx-text-fill: white;
+    -fx-border-color: #ff5555;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+    -fx-animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { -fx-background-color: #800000; }
+}
+
+/* Input Field */
+.user-input {
+    -fx-background-color: #1a1a1a;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #00ffff;
+    -fx-border-radius: 5px;
+    -fx-font-family: "Consolas";
+    -fx-padding: 5px;
 }
 
 /* Send Button */
-.button {
-    -fx-background-color: #64b5f6;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
+.send-button {
+    -fx-background-color: #00ffff;
+    -fx-text-fill: #000000;
+    -fx-font-family: "Roboto Mono";
     -fx-border-radius: 5px;
-    -fx-padding: 5px;
 }
-.button:hover {
-    -fx-background-color: #42a5f5;
+.send-button:hover {
+    -fx-background-color: #ffcc00;
 }
-.button:pressed {
-    -fx-background-color: #1976d2;
-}
-
-/* Chat Bubble Styles */
-.label {
-    -fx-padding: 10px;
-    -fx-background-radius: 10px;
-    -fx-wrap-text: true;
-    -fx-max-width: 400px;
-}
-
-/* User Message */
-.user-dialog {
-    -fx-background-color: #bbdefb;
-    -fx-text-fill: black;
-    -fx-alignment: center-right;
-    -fx-border-color: #64b5f6;
-}
-
-/* Bot Message */
-.bot-dialog {
-    -fx-background-color: #e0e0e0;
-    -fx-text-fill: black;
-    -fx-alignment: center-left;
-    -fx-border-color: #b0bec5;
-}
-
-/* Error Message */
-.error-dialog {
-    -fx-background-color: #ffcccb;
-    -fx-text-fill: red;
-    -fx-border-color: red;
-    -fx-font-weight: bold;
-}
-
-/* Circular Profile Picture */
-#displayPicture {
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 5, 5);
-    -fx-background-radius: 50%;
-}
-
-/* Smooth Hover Effects */
-.button:hover {
-    -fx-background-color: cyan;
-}
-.button:pressed {
-    -fx-background-color: orange;
+.send-button:pressed {
+    -fx-background-color: #ff0000;
 }
