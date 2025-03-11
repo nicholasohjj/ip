@@ -36,14 +36,6 @@ Refer to the **Features** section below for details on each command.
 
 ## Features
 
-### Viewing Help: `help`
-Displays a message explaining how to access the help page.
-
-**Format:**
-```
-help
-```
-
 ### Adding a Task: `add`
 Adds a new task to the task list.
 
@@ -139,17 +131,17 @@ bye
 
 ## Command Summary
 
-| **Action**  | **Format, Examples**  |
-|------------|----------------------|
-| **Add**    | `todo DESCRIPTION`  |
-|            | `deadline DESCRIPTION /by TIME`  |
-|            | `event DESCRIPTION /from START /to END`  |
-| **Mark**   | `mark INDEX` (e.g., `mark 1`)  |
-| **Unmark** | `unmark INDEX` (e.g., `unmark 1`)  |
-| **Delete** | `delete INDEX` (e.g., `delete 3`)  |
-| **Find**   | `find KEYWORD [MORE_KEYWORDS]` (e.g., `find book`)  |
-| **List**   | `list`  |
-| **Bye**    | `bye`  |
-| **Help**   | `help`  |
+| **Action**       | **Format, Examples**                                    |
+|------------------|---------------------------------------------------------|
+| **Add tasks**    | `todo DESCRIPTION`                                      |
+|                  | `deadline DESCRIPTION /by TIME`                         |
+|                  | `event DESCRIPTION /from START /to END`                 |
+| **Mark tasks**   | `marktasks INDEX` (e.g., `mark 1`)                      |
+| **Unmark tasks** | `unmarktasks INDEX` (e.g., `unmark 1`)                  |
+| **Delete tasks** | `deletetasks INDEX` (e.g., `delete 3`)                  |
+| **Find tasks**   | `findtasks KEYWORD [MORE_KEYWORDS]` (e.g., `find book`) |
+| **List tasks**   | `listtasks`                                             |
+| **Bye**          | `bye`                                                   |
+| **Help**         | `help`                                                  |
 
 For any further questions or issues, open an issue in the repository. Enjoy managing your tasks with Nininana!
